@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>
+			Travel Weather App Project-1
+		</title>
+		<!--reset css style to this html-->
+<!-- 		<link rel="stylesheet"	type="text/css" href="assets/css/reset.css"> -->
+		<!--Linking the css style to this html-->
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+		<!--jQuery-->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+		<!--LINKING HTML TO Bootstrap CSS FILE8-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+	</head>
+
+	</body>
+
+		<!--linking to javascript>-->
+		<script>
+
+
+			//----------------GOOGLE DIRECTIONS---------------------
+
+var beginLocation = "Tucson"
+var endLocation= "St. Louis"
+var directionsAPI = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin="+beginLocation+"&destination="+endLocation+"4&key=AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI"
+
+function directionsAccess(){
+
+    $.ajax({
+        url: directionsAPI,
+        method:"GET"
+
+    })
+    .done(function(response){
+    	console.log(response);
+	});
+}
+
+
+
+//------------------WEATHER API-----------------------------------
+
+// function undergroundWeatherURL(longitude,latitude){
+
+//     var undergroundWeatherapiKey="b26eea70cef99b97";
+
+//     var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+longitude+","+latitude+.json";
+
+//     return undergroundWeatherURL;
+// }
+
+// function getundergroundWeatherAPI(){
+
+//     $.ajax({
+//         url: undergroundWeatherURL(32.2217,-110.9265),
+//         method:"GET"
+//     })
+//     .done(function(response){
+        
+//         	console.log(response.hourly_forecast[0].FCTIME.hour);
+//     })
+// }
+//var undergroundWeatherAPI=getundergroundWeatherAPI();
+
+//console.log(undergroundWeatherAPI.hourly_forecast[0].hour);
+
+
+
+		</script>
+
+	</body>
+</html>
