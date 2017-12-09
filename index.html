@@ -17,7 +17,7 @@
 
 		<div class="jumbotron jumbotron-fluid">
 		  <div class="container">
-		    <h1 class="display-3">Travel-Weather API</h1>
+		    <h1 class="display-1">Travel-Weather API</h1>
 		  </div>
 		</div>
 		<div class="container-fluid">
@@ -25,36 +25,31 @@
 			    <div class="col-sm-3 sidenav">
 			    	<div class="card">
 			    		<div class="card-header">
-					    <h3 id="smallHeader">Search Parameters:</h3>
+					    <h3 id="smallHeader">Let's set up your trip!</h3>
 					  	</div>
 					  	<div class="card-body">
 					      	<form>
 							  <div class="form-group">
-							    <label>Search Terms</label>
-							    <input id="searchTerms" type="text" class="form-control" name="search" placeholder="Search Terms">
-							    
-							  </div>
-							  <div class="form-group">
-							    <label>Number of Records to Retrieve:</label>
+							    <label>Start Location</label>
+                                <input id="searchTerms" type="text" class="form-control" name="search" placeholder="e.g. Tucson, AZ">
+                              </div>
+                                
+                            <div class="form-group">
+                                <label>End Location</label>
+                                <input id="searchTerms" type="text" class="form-control" name="search" placeholder="Where are you going?">
+                            </div>
+
+							<div class="form-group">
+							    <label>Display Weather Every:</label>
 							    <select class="form-control" id="exampleFormControlSelect1">
-							      <option value="5">5</option>
-							      <option value="10">10</option>
-							      <option value="15">15</option>			     
+							      <option value="5">30 miles</option>
+							      <option value="10">60 miles</option>
+							      <option value="15">100 miles</option>			     
 							    </select>
-							  </div>
-							  <div class="form-group">
-							    <label>Start Year(Optional)</label>
-							    <input id="startYear" type="text" class="form-control" name="search" placeholder="">
-							    
-							  </div>
-							  <div class="form-group">
-							    <label>End Year(Optional)</label>
-							    <input id="endYear" type="text" class="form-control" name="search" placeholder="">
-							    
 							  </div>
 
 							</form>
-							<button type="submit" class="btn btn-default" id="runSearch"><i class="fa fa-search"></i> Search</button>
+							<button type="submit" class="btn btn-basic btn-lg" id="runSearch"><i class="fa fa-search"></i> Search</button>
 						</div>
 					</div>
 			    </div>
