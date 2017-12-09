@@ -13,13 +13,14 @@
 </head>
 <body>
 
-	<div class="container">
-
-		<div class="jumbotron jumbotron-fluid">
+	<div class="jumbotron jumbotron-fluid">
 		  <div class="container">
 		    <h1 class="display-3">Travel-Weather API</h1>
 		  </div>
 		</div>
+	<div class="container">
+
+		
 		<div class="container-fluid">
 			<div class="row content">
 			    <div class="col-sm-3 sidenav">
@@ -30,65 +31,68 @@
 					  	<div class="card-body">
 					      	<form>
 							  <div class="form-group">
-							    <label>Search Terms</label>
+							    <label>Starting Location</label>
+							    <input id="searchTerms" type="text" class="form-control" name="search" placeholder="Search Terms">
+							    
+							  </div>
+								<h4 id="center">-To-</h4>
+							  <div class="form-group">
+							    <label>End Location</label>
 							    <input id="searchTerms" type="text" class="form-control" name="search" placeholder="Search Terms">
 							    
 							  </div>
 							  <div class="form-group">
-							    <label>Number of Records to Retrieve:</label>
+							    <label>Display Weather Every:</label>
 							    <select class="form-control" id="exampleFormControlSelect1">
-							      <option value="5">5</option>
-							      <option value="10">10</option>
-							      <option value="15">15</option>			     
+							      <option value="5">25 Miles</option>
+							      <option value="10">50 Miles</option>
+							      <option value="15">100 Miles</option>			     
 							    </select>
 							  </div>
-							  <div class="form-group">
-							    <label>Start Year(Optional)</label>
-							    <input id="startYear" type="text" class="form-control" name="search" placeholder="">
-							    
-							  </div>
-							  <div class="form-group">
-							    <label>End Year(Optional)</label>
-							    <input id="endYear" type="text" class="form-control" name="search" placeholder="">
-							    
-							  </div>
-
+							  
 							</form>
 							<button type="submit" class="btn btn-default" id="runSearch"><i class="fa fa-search"></i> Search</button>
 						</div>
 					</div>
 			    </div>
 
-			    <div class="col-sm-9">
-			    	<div class="card">
-					  <div class="card-header">
-					    <h3 id="smallHeader">Top Stories:</h3>
-					  </div>
-					  <div id="topStories" class="card-body">
+			    <div class="col-sm-9">			    	
+					   <div id="mapBody" class="card-body">
 					    <iframe
 						  width= 100%
 						  height="450"
 						  frameborder="0" style="border:0"
 						  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCoeHafkAPgelHRn50olTj12ag1bkmGHnY
 						    &q=Space+Needle,Seattle+WA" allowfullscreen>
-						</iframe>
-					  </div>
-					</div>
-			      
-			      
+						</iframe>					  
+					</div>			      
 			    </div>
 
 			</div>
 		</div>
-		<div class="row-fluid">
-			
-		</div>
+			<div class="col">
+			    	<div id="weatherbox" class="card">
+					  <div  class="card-header">
+					    <h3 id="smallHeader">More Info:</h3>
+					  </div>
+					  <div id="detailedWeather" class="card-body">
+					  	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id ante nisi. Cras ante justo, laoreet eu ullamcorper vitae, fermentum malesuada diam. Curabitur semper odio ut ultricies dictum. Sed vitae nisi a sapien malesuada eleifend. Etiam lacinia quam ut tellus accumsan tincidunt. Aenean eleifend blandit dignissim. Morbi laoreet erat turpis, in imperdiet eros finibus vitae. Donec ac placerat nunc, ut vestibulum dui. Cras pretium, magna in aliquet pellentesque, augue massa ornare ex, ut molestie nibh justo eget nisl. Aliquam efficitur id est nec consequat. Nulla dui mi, blandit et purus quis, placerat consequat nisl. Phasellus sed pulvinar massa, ut dapibus libero. Nullam sed libero lacus.</p>
+
+						<p>Sed ac sem in diam vulputate dapibus. Vivamus vestibulum libero at lectus suscipit, non sodales massa convallis. Nullam vel tristique tellus. Morbi efficitur massa fringilla lorem efficitur fringilla. Nulla laoreet eros sed orci eleifend accumsan. Suspendisse porttitor nisl vitae arcu tristique, vel aliquet nunc cursus. Vivamus sapien sapien, tempus accumsan sem vitae, sodales luctus risus. Donec id sem vel felis posuere volutpat a et nunc. Quisque gravida ante eget dui mollis eleifend. Etiam vitae ligula sed risus feugiat cursus sed ut metus. Nunc ac aliquam tellus. Nam id tincidunt ipsum. Suspendisse nisl nisl, ullamcorper ac rhoncus ac, tempus at odio. Praesent in feugiat augue. Duis in laoreet lectus.</p>
+
+						<p>Maecenas vehicula auctor tempus. Duis ac metus ligula. Sed pretium, turpis ac commodo imperdiet, mauris ante imperdiet dolor, ut lacinia justo nisl vitae elit. Cras pretium augue non justo tincidunt, eget fringilla sem ultricies. Duis rutrum, elit vitae iaculis sagittis, lacus justo luctus leo, sed posuere mauris enim sed magna. Nam ullamcorper nisl nulla, eu blandit urna accumsan sit amet. Aenean commodo eu eros vitae dictum. Sed eget orci ut justo congue vulputate. Ut eleifend orci non leo pharetra imperdiet. Cras sollicitudin tortor tortor, ac sollicitudin ex rutrum ut. Vestibulum eget interdum nisl. Aliquam euismod augue laoreet ligula varius scelerisque.</p>
+
+											    
+					  </div>
+					</div>			      
+			   </div>
+		
 
 	</div>
 	
 
 	<footer class="container-fluid">
-	  <p>FooBar</p>
+	  <h3>&copy; Alan, Perla, Darwood, Trevor</h3>
 	</footer>
 
 </body>
