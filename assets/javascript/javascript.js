@@ -1,14 +1,3 @@
-
-//--------------GOOGLE MAPS ---------------------
-   var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
-      }
-
-
 //----------------DIRECTIONS API---------------------
 var startingLocation="Yuma, Arizona";
 var endingLocation="Tucson, Arizona";
@@ -17,7 +6,8 @@ function directionsURL(startingLocation, endingLocation){
 	var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
 
 
-	var directionsURL="https://maps.googleapis.com/maps/api/directions/json?origin="+startingLocation+"&destination="+endingLocation+"&key="+directionsKEY;
+	var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+startingLocation+"&destination="+endingLocation+"&key="+directionsKEY;
+	console.log(directionsURL);
 	return directionsURL;
 
 }
@@ -30,7 +20,7 @@ function getDirectionsAPI(){
 	})
 	.done(function(response){
 		
-		console.log(response.routes[0].legs.distance.text);
+		console.log(response.routes[0].legs[0].duration.text);
 	
 	})
 }
