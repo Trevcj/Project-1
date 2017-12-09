@@ -1,3 +1,47 @@
+<<<<<<< HEAD
 .display-3 {
     text-align: center;
+=======
+.jumbotron {
+	background-image: url(../images/topography.png);
+	text-align: center;
+	color: #777;
+	border-bottom: solid 1px #ddd;
+}
+
+.sidenav {
+	background-image: url(../images/topography.png);
+	border: solid 1px #ddd;
+	padding-bottom: 15px;
+	color: #777;
+}
+#center {
+	text-align: center;
+}
+
+#weatherbox {
+	border: solid 1px #ddd;
+
+}
+
+.card-header {
+	background-image: url(../images/topography.png);
+	padding: 5px;
+	border-bottom: solid 1px #ddd;
+	color: #777;
+}
+#detailedWeather {
+	padding: 10px;
+	color: #777;
+}
+#mapBody{
+	margin-bottom: 15px;
+}
+footer {
+	text-align: center;
+	background-image: url(../images/topography.png);
+	/*padding-top: 15px;*/
+	margin-top: 15px;
+	border-top:solid 1px #ddd;
+>>>>>>> 1c47403a0dbb5824a8fce41363123c8409f9fd86
 }
