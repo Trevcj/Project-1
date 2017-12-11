@@ -1,32 +1,11 @@
-//-------------GOOGLE MAP----------------------------
-function initMap() {
-
-
-    // Create a map object and specify the DOM element for display.
-    var map = new google.maps.Map(document.getElementById("mapBody"), {
-          center: {lat: 32.2217, lng: -110.9265},
-          zoom: 8
-    });
-
-    //crating marker at start position
-    var marker = new google.maps.Marker({
-         position:{lat: 32.2217, lng: -110.9265} ,
-         map: map,
-         title:'Starting Location'
-        });
-      }
-
-
 //----------------DIRECTIONS API---------------------
-var startingLocation="Yuma, Arizona";
-var endingLocation="Tucson, Arizona";
 
-function directionsURL(startingLocation, endingLocation){
+function directionsURL(startLocation, endLocation){
 	var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
 
 
 	var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+startingLocation+"&destination="+endingLocation+"&key="+directionsKEY;
-	console.log(directionsURL);
+	
 	return directionsURL;
 
 }
@@ -44,7 +23,6 @@ function getDirectionsAPI(){
 	})
 }
 
-getDirectionsAPI();
 
 //------------------WEATHER API-----------------------------------
 
@@ -72,11 +50,49 @@ function getUndergroundweatherAPI(){
 	})
 }
 
-//makesure you call the funtion to display 
-getUndergroundweatherAPI();
+//----------------DISPLAY DIRECTIONS-------------------
+
+var directionsDisplay;
+var directionsService;
+var map;
+
+function initMap() {
+  directionsService = new google.maps.DirectionsService();
+  directionsDisplay = new google.maps.DirectionsRenderer();
+  var Tucson= new google.maps.LatLng(32.2217,-110.9265);
+  var mapOptions = {
+    zoom:8,
+    center:{lat: 32.2217, lng: -110.9265}
+    
+  }
+ 
+  map = new google.maps.Map(document.getElementById("mapBody"), mapOptions);
+  directionsDisplay.setMap(map);
+
+}
+
+function calcRoute() {
+ 
+  var request = {
+    origin: $("#startLocation").val(),
+    destination: $("#endLocation").val(),
+    travelMode: 'DRIVING'
+  };
+  directionsService.route(request, function(result, status) {
+    if (status == 'OK') {
+      directionsDisplay.setDirections(result);
+    }
+  });
+}
 
 
+$("#runSearch").on("click",function(){
 
+	var startLocation=$("#startLocation").val().trim();
+	var endLocation=$("#startLocation").val().trim();
+	console.log("im here");
+	calcRoute();
+	/*getDirectionsAPI(startLocation,endLocation);
+	getUndergroundweatherAPI(longitude,latitude);*/
 
-
-
+});
