@@ -1,3 +1,22 @@
+//-------------GOOGLE MAP----------------------------
+function initMap() {
+
+
+    // Create a map object and specify the DOM element for display.
+    var map = new google.maps.Map(document.getElementById("mapBody"), {
+          center: {lat: 32.2217, lng: -110.9265},
+          zoom: 8
+    });
+
+    //crating marker at start position
+    var marker = new google.maps.Marker({
+         position:{lat: 32.2217, lng: -110.9265} ,
+         map: map,
+         title:'Starting Location'
+        });
+      }
+
+
 //----------------DIRECTIONS API---------------------
 var startingLocation="Yuma, Arizona";
 var endingLocation="Tucson, Arizona";
