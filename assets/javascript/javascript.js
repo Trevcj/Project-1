@@ -1,7 +1,6 @@
 //----------------DIRECTIONS API---------------------
 
-var duration;
-var distance;
+
 
 function directionsURL(startLocation, endLocation){
 	var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
@@ -59,11 +58,17 @@ function getUndergroundweatherAPI(){
 
 //----------------DISPLAY DIRECTIONS-------------------
 
+var durationTrip;
+var distanceTrip;
 var directionsDisplay;
 var directionsService;
 var map;
-
+//var poly;
+//var path;
 var infowindowDriving;
+
+
+
 
 //map initial when nothing has been inputted
 function initMap() {
@@ -71,15 +76,17 @@ function initMap() {
   	directionsDisplay = new google.maps.DirectionsRenderer();
 	var Tucson= new google.maps.LatLng(32.2217,-110.9265);
   	var mapOptions = {
-   		zoom:4,
-    	center:{lat: 32.2217, lng: -110.9265}
+   		zoom:3,
+    	center:Tucson
     
 	}
  
 	map = new google.maps.Map(document.getElementById("mapBody"), mapOptions);
 	directionsDisplay.setMap(map);
- 	
+
 }
+
+
 //calculates the route
 function calcRoute() {
  
@@ -97,13 +104,14 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
-
+      durationTrip=response.routes[0].legs[0].duration.text;
+      distanceTrip=response.routes[0].legs[0].distance.text;
       
       var infowindow = new google.maps.InfoWindow();
-      infowindow.setContent(response.routes[0].legs[0].distance.text + "<br>" + response.routes[0].legs[0].duration.text + " ");
+      infowindow.setContent( "<strong>"+durationTrip+"</strong>"+ "<br>" + distanceTrip + " ");
       
       //the info window will be placed at the end of the route
-      infowindow.setPosition(response.routes[0].legs[0].start_location);
+      infowindow.setPosition(response.routes[0].legs[0].end_location);
      
       infowindow.open(map);
     }
@@ -112,6 +120,7 @@ function calcRoute() {
   
  
 }
+
 
 
 
@@ -128,6 +137,7 @@ $("#runSearch").on("click",function(){
 		calcRoute();
 
 	}
+	//console.log(directionsURL("tucson,arizona","yuma,arizona"));
 
 
 });
