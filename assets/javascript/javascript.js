@@ -1,10 +1,13 @@
 //----------------DIRECTIONS API---------------------
 
+var duration;
+var distance;
+
 function directionsURL(startLocation, endLocation){
 	var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
 
 
-	var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+startingLocation+"&destination="+endingLocation+"&key="+directionsKEY;
+	var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+startLocation+"&destination="+endLocation+"&key="+directionsKEY;
 	
 	return directionsURL;
 
@@ -13,18 +16,22 @@ function directionsURL(startLocation, endLocation){
 function getDirectionsAPI(){
 
 	$.ajax({
-		url: directionsURL(startingLocation,endingLocation),
+		url: directionsURL(startLocation,endLocation),
 		method:"GET"
 	})
 	.done(function(response){
+
 		
-		console.log(response.routes[0].legs[0].duration.text);
+
+
+		
 	
 	})
 }
 
 
 //------------------WEATHER API-----------------------------------
+
 
 function undergroundWeatherURL(longitude,latitude){
 
@@ -56,21 +63,24 @@ var directionsDisplay;
 var directionsService;
 var map;
 
+var infowindowDriving;
+
+//map initial when nothing has been inputted
 function initMap() {
-  directionsService = new google.maps.DirectionsService();
-  directionsDisplay = new google.maps.DirectionsRenderer();
-  var Tucson= new google.maps.LatLng(32.2217,-110.9265);
-  var mapOptions = {
-    zoom:8,
-    center:{lat: 32.2217, lng: -110.9265}
+	directionsService = new google.maps.DirectionsService();
+  	directionsDisplay = new google.maps.DirectionsRenderer();
+	var Tucson= new google.maps.LatLng(32.2217,-110.9265);
+  	var mapOptions = {
+   		zoom:4,
+    	center:{lat: 32.2217, lng: -110.9265}
     
-  }
+	}
  
-  map = new google.maps.Map(document.getElementById("mapBody"), mapOptions);
-  directionsDisplay.setMap(map);
-
+	map = new google.maps.Map(document.getElementById("mapBody"), mapOptions);
+	directionsDisplay.setMap(map);
+ 	
 }
-
+//calculates the route
 function calcRoute() {
  
   var request = {
@@ -83,16 +93,41 @@ function calcRoute() {
       directionsDisplay.setDirections(result);
     }
   });
+
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      directionsDisplay.setDirections(response);
+
+      
+      var infowindow = new google.maps.InfoWindow();
+      infowindow.setContent(response.routes[0].legs[0].distance.text + "<br>" + response.routes[0].legs[0].duration.text + " ");
+      
+      //the info window will be placed at the end of the route
+      infowindow.setPosition(response.routes[0].legs[0].start_location);
+     
+      infowindow.open(map);
+    }
+  });
+  
+  
+ 
 }
 
 
+
+
+//-----------------geting usersinput--------------------
 $("#runSearch").on("click",function(){
 
 	var startLocation=$("#startLocation").val().trim();
 	var endLocation=$("#startLocation").val().trim();
-	console.log("im here");
-	calcRoute();
-	/*getDirectionsAPI(startLocation,endLocation);
-	getUndergroundweatherAPI(longitude,latitude);*/
+
+	
+
+	if(startLocation&& endLocation !==" "){
+		calcRoute();
+
+	}
+
 
 });
