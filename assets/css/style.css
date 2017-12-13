@@ -33,8 +33,10 @@ h5 {
 	padding: 10px;
 	color: #777;
 }
-#mapBody{
+#map{
 	margin-bottom: 15px;
+	height: 400px;
+	widows: 100%;
 }
 footer {
 	text-align: center;
