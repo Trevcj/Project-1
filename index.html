@@ -1,77 +1,141 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>
-			Travel Weather App Project-1
-		</title>
-		<!--reset css style to this html-->
-<!-- 		<link rel="stylesheet"	type="text/css" href="assets/css/reset.css"> -->
-		<!--Linking the css style to this html-->
-		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+<head>
+	<title>Travel-Weather API</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5txE1u5FB5GQ8UWshthJYQ8eUGfKXisg" type="text/javascript"></script>
+	<script type="text/javascript" src="assets/javascript/epolyv3.js"></script>
+</head>
+<body>
 
-		<!--jQuery-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+		    <h1 class="display-3">Travel-Weather API</h1>
+		    <h5>Use this app to display the weather on your route.</h5>
+		  </div>
+		</div>
+	<div class="container">
 
-		<!--LINKING HTML TO Bootstrap CSS FILE8-->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-	</head>
+		
+		<div class="container-fluid">
+			<div class="row content">
+			    <div class="col-sm-3 sidenav">
+			    	<div class="card">
+			    		<div class="card-header">
+					    <h3 id="smallHeader">Search Parameters:</h3>
+					  	</div>
+					  	<div class="card-body">
+					      	<form>
+							  <div class="form-group">
+							    <label>Starting Location</label>
+							    <input id="startLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
+							    
+							  </div>
+								<h4 id="center">-To-</h4>
+							  <div class="form-group">
+							    <label>End Location</label>
+							    <input id="endLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
+							    
+							  </div>
+							  <div class="form-group">
+							    <label>Display Weather Every:</label>
+							    <select class="form-control" id="mileValue">
+							      <option value="25">25 Miles</option>
+							      <option value="50">50 Miles</option>
+							      <option value="100">100 Miles</option>			     
+							    </select>
+							  </div>
+							  
+							</form>
+							<button type="submit" class="btn btn-default" id="runSearch"><i class="fa fa-search"></i> Search</button>
+						</div>
+					</div>
+			    </div>
 
-	</body>
+			    <div class="col-sm-9">			    	
+					   <div id="mapBody" class="card-body">
+					    <iframe
+						  width= 100%
+						  height="450"
+						  frameborder="0" style="border:0"
+						  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCoeHafkAPgelHRn50olTj12ag1bkmGHnY
+						    &q=Space+Needle,Seattle+WA" allowfullscreen>
+						</iframe>					  
+					</div>			      
+			    </div>
 
-		<!--linking to javascript>-->
-		<script>
+			</div>
+		</div>
+			<div class="col">
+			    	<div id="weatherbox" class="card">
+					  <div  class="card-header">
+					    <h3 id="smallHeader">More Info:</h3>
+					  </div>
+					  <div id="detailedWeather" class="card-body">
+					  	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id ante nisi. Cras ante justo, laoreet eu ullamcorper vitae, fermentum malesuada diam. Curabitur semper odio ut ultricies dictum. Sed vitae nisi a sapien malesuada eleifend. Etiam lacinia quam ut tellus accumsan tincidunt. Aenean eleifend blandit dignissim. Morbi laoreet erat turpis, in imperdiet eros finibus vitae. Donec ac placerat nunc, ut vestibulum dui. Cras pretium, magna in aliquet pellentesque, augue massa ornare ex, ut molestie nibh justo eget nisl. Aliquam efficitur id est nec consequat. Nulla dui mi, blandit et purus quis, placerat consequat nisl. Phasellus sed pulvinar massa, ut dapibus libero. Nullam sed libero lacus.</p>
+
+						<p>Sed ac sem in diam vulputate dapibus. Vivamus vestibulum libero at lectus suscipit, non sodales massa convallis. Nullam vel tristique tellus. Morbi efficitur massa fringilla lorem efficitur fringilla. Nulla laoreet eros sed orci eleifend accumsan. Suspendisse porttitor nisl vitae arcu tristique, vel aliquet nunc cursus. Vivamus sapien sapien, tempus accumsan sem vitae, sodales luctus risus. Donec id sem vel felis posuere volutpat a et nunc. Quisque gravida ante eget dui mollis eleifend. Etiam vitae ligula sed risus feugiat cursus sed ut metus. Nunc ac aliquam tellus. Nam id tincidunt ipsum. Suspendisse nisl nisl, ullamcorper ac rhoncus ac, tempus at odio. Praesent in feugiat augue. Duis in laoreet lectus.</p>
+
+						<p>Maecenas vehicula auctor tempus. Duis ac metus ligula. Sed pretium, turpis ac commodo imperdiet, mauris ante imperdiet dolor, ut lacinia justo nisl vitae elit. Cras pretium augue non justo tincidunt, eget fringilla sem ultricies. Duis rutrum, elit vitae iaculis sagittis, lacus justo luctus leo, sed posuere mauris enim sed magna. Nam ullamcorper nisl nulla, eu blandit urna accumsan sit amet. Aenean commodo eu eros vitae dictum. Sed eget orci ut justo congue vulputate. Ut eleifend orci non leo pharetra imperdiet. Cras sollicitudin tortor tortor, ac sollicitudin ex rutrum ut. Vestibulum eget interdum nisl. Aliquam euismod augue laoreet ligula varius scelerisque.</p>
+
+											    
+					  </div>
+					</div>			      
+			   </div>
+		
+
+	</div>
+	
+
+	<footer class="container-fluid">
+	  <h3>&copy; Alan, Perla, Darwood, Trevor</h3>
+	</footer>
+
+	<script type="text/javascript">
 
 
-			//----------------GOOGLE DIRECTIONS---------------------
+					//----------------GOOGLE DIRECTIONS---------------------
 
-var beginLocation = "Tucson"
-var endLocation= "St. Louis"
-var directionsAPI = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin="+beginLocation+"&destination="+endLocation+"4&key=AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI"
+					  	//Accept User Input
+  	$("#runSearch").on("click", function(event) {
+      event.preventDefault();
+		var startLocation = $("#startLocation").val().trim();
+		var endLocation= $("#endLocation").val().trim();
+		var distanceInterval= $("#mileValue").val();
 
-function directionsAccess(){
+		console.log(startLocation);
+		console.log(endLocation);
+		console.log(distanceInterval);
 
-    $.ajax({
-        url: directionsAPI,
-        method:"GET"
+	
 
-    })
-    .done(function(response){
-    	console.log(response);
+		var directionsAPI = "https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin="+startLocation+"&destination="+endLocation+"4&key=AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI"
+
+		function directionsAccess(){
+
+		    $.ajax({
+		        url: directionsAPI,
+		        method:"GET"
+
+		    })
+		    .done(function(response){
+		    	var points = response.GetPointsAtDistance(distanceInterval*1.609344);
+		    	console.log(respose);
+		    	console.log(points);
+			});
+		}
+
+		directionsAccess();
 	});
-}
 
 
-
-//------------------WEATHER API-----------------------------------
-
-// function undergroundWeatherURL(longitude,latitude){
-
-//     var undergroundWeatherapiKey="b26eea70cef99b97";
-
-//     var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+longitude+","+latitude+.json";
-
-//     return undergroundWeatherURL;
-// }
-
-// function getundergroundWeatherAPI(){
-
-//     $.ajax({
-//         url: undergroundWeatherURL(32.2217,-110.9265),
-//         method:"GET"
-//     })
-//     .done(function(response){
-        
-//         	console.log(response.hourly_forecast[0].FCTIME.hour);
-//     })
-// }
-//var undergroundWeatherAPI=getundergroundWeatherAPI();
-
-//console.log(undergroundWeatherAPI.hourly_forecast[0].hour);
+	</script>
 
 
-
-		</script>
-
-	</body>
+</body>
 </html>
