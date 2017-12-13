@@ -34,13 +34,13 @@
 					      	<form>
 							  <div class="form-group">
 							    <label>Starting Location</label>
-							    <input id="startLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
+							    <input id="startLocation" onFocus="geolocate()" type="text" class="form-control" name="search" placeholder="Start Location">
 							    
 							  </div>
 								<h4 id="center">-To-</h4>
 							  <div class="form-group">
 							    <label>End Location</label>
-							    <input id="endLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
+							    <input id="endLocation" onFocus="geolocateEnd()" type="text" class="form-control" name="search" placeholder="End Location">
 							    
 							  </div>
 							  <div class="form-group">
@@ -93,10 +93,7 @@
 	<!--linking to javascript>-->
 	<script type="text/javascript" src="assets/javascript/javascript.js"></script>
 	<!--google maps link for displaying map--> 
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoeHafkAPgelHRn50olTj12ag1bkmGHnY&callback=initMap"></script>
-	<!--add to work with geometry library:&libraries=geometry-->
-
-	<!--epoly extension-->
-	<!--<script type="text/javascript" src="assets/javascript/epoly.js"></script>-->
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8&libraries=places&callback=initMap"></script>
+	<!--add to work with geometry t/javascript" src="assets/javascript/epoly.js"></script>-->
 </body>
 </html>
