@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	<script type="text/javascript" src="assets/javascript/javascript.js"></script>
 	<!-- <script type="text/javascript" src="assets/javascript/epoly.js"></script> -->
+	
 </head>
 <body>
 
@@ -33,18 +34,18 @@
 					      	<form>
 							  <div class="form-group">
 							    <label>Starting Location</label>
-							    <input id="startLocation" type="text" class="form-control" name="search" placeholder="Start Location">
+							    <input id="startLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
 							    
 							  </div>
 								<h4 id="center">-To-</h4>
 							  <div class="form-group">
 							    <label>End Location</label>
-							    <input id="endLocation" type="text" class="form-control" name="search" placeholder="End Location">
+							    <input id="endLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
 							    
 							  </div>
 							  <div class="form-group">
 							    <label>Display Weather Every:</label>
-							    <select class="form-control" id="mileValue">
+							    <select class="form-control" id="displayEverymiles">
 							      <option value="5">25 Miles</option>
 							      <option value="10">50 Miles</option>
 							      <option value="15">100 Miles</option>			     
@@ -58,8 +59,8 @@
 			    </div>
 
 			    <div class="col-sm-9">			    	
-					   <div id="map" class="card-body">
-					   					  
+					   <div id="mapBody" class="card-body">
+					    				  
 					</div>			      
 			    </div>
 
@@ -89,23 +90,13 @@
 	<footer class="container-fluid">
 	  <h3>&copy; Alan, Perla, Darwood, Trevor</h3>
 	</footer>
+	<!--linking to javascript>-->
+	<script type="text/javascript" src="assets/javascript/javascript.js"></script>
+	<!--google maps link for displaying map--> 
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCoeHafkAPgelHRn50olTj12ag1bkmGHnY&callback=initMap"></script>
+	<!--add to work with geometry library:&libraries=geometry-->
 
- <script>
-      function initMap() {
-        var position = {lat: 32.2217, lng: -110.9265};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 8,
-          center: position
-        });
-        var marker = new google.maps.Marker({
-          position: position,
-          map: map
-        });
-      }
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsZdmMsWFP00MSQ1kaySVJLLszIsAsyHo&callback=initMap">
-    </script>
-
+	<!--epoly extension-->
+	<!--<script type="text/javascript" src="assets/javascript/epoly.js"></script>-->
 </body>
 </html>
