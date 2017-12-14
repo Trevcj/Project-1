@@ -61,9 +61,6 @@ var path;
 var infowindow = new google.maps.InfoWindow();
 var markers=[];
 
-
-
-
 //map initial when nothing has been inputted
 function initMap() {
   directionsService = new google.maps.DirectionsService();
@@ -177,14 +174,6 @@ function calcRoute() {
         infowindow.open(map, this);
 
         });
-        
-        marker.addListener("click",function(){
-
-
-          openInfowindow(this);
-
-        });
-        
         markers.push(marker);
       }
 
@@ -238,12 +227,6 @@ function getPointsAtDistance(meters){
   }
   return points;
 }
-function openInfowindow() {
-    var contentString = this.getTitle()+"<br>"+this.getPosition().toUrlValue(6);
-    infowindow.setContent(contentString);
-    infowindow.open(map, this);
-}
-
 var markericons=new Array();
 markericons["blue"]={url: "http://maps.google.com/mapfiles/ms/micons/red.png"};
 
@@ -256,9 +239,6 @@ function getMarkerImage(iconColor) {
    } 
    return markericons[iconColor];
 }
-
-
-
 
 google.maps.event.addDomListener(window, 'load', initMap);
 
