@@ -182,12 +182,13 @@ function calcRoute() {
 
         //this is where we will display the weather Conditions
         marker.addListener('click', function(){
+          var clickedMarker=this;
           var markerPosition=this.getPosition().toUrlValue(6);
           var array=markerPosition.split(",");
           var makerPositionLat=array[0];
           var makerPositionLng=array[1];
           //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
-          undergroundWeatherAPI(makerPositionLat,makerPositionLng,marker);
+          undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker);
       
         });
         markers.push(marker);
@@ -202,6 +203,7 @@ function calcRoute() {
 
 function createMarker(latlng, label, html, color) {
   var contentString = '<b>' + label +"whats myname" +'</b><br>' + html;
+  
   var marker = new google.maps.Marker({
     position: latlng, 
     map: map,
