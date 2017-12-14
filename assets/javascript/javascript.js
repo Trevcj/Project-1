@@ -20,16 +20,8 @@ function getDirectionsAPI(){
     method:"GET"
   })
   .done(function(response){
-
-    
-
-
-    
-  
-  })
+  });
 }
-
-
 //------------------WEATHER API-----------------------------------
 
 
@@ -92,6 +84,13 @@ function initMap() {
     strokeColor:'red',
     stroWeight:3
   });
+
+  //autocompletelocation
+  initAutocomplete();
+  initAutocompleteEnd();
+  
+ 
+
 
 }
 
@@ -268,17 +267,95 @@ $("#runSearch").on("click",function(){
 
   var origin=$("#startLocation").val().trim();
   var destination=$("#startLocation").val().trim();
-
   
-
   if(startLocation&& endLocation !==" "){
     calcRoute();
 
   }
-  
-
 
 });
 
+//-------AUTOCOMPLETE
+var placeSearch, autocomplete;
+var componentForm = {
+  street_number: 'short_name',
+  route: 'long_name',
+  locality: 'long_name',
+  administrative_area_level_1: 'short_name',
+  country: 'long_name',
+  postal_code: 'short_name'
+};
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('startLocation')),
+      {types: ['geocode']});
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', geolocate);
+}
 
 
+
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+function geolocate() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle({
+        center: geolocation,
+        radius: position.coords.accuracy
+      });
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
+}
+
+ var placeSearch, autocomplete;
+var componentForm = {
+  street_number: 'short_name2',
+  route: 'long_name2',
+  locality: 'long_name2',
+  administrative_area_level_1: 'short_name2',
+  country: 'long_name2',
+  postal_code: 'short_name2'
+};
+
+function initAutocompleteEnd() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */(document.getElementById('endLocation')),
+      {types: ['geocode']});
+
+  // When the user selects an address from the dropdown, populate the address
+  // fields in the form.
+  autocomplete.addListener('place_changed', geolocateEnd);
+}
+
+
+
+// Bias the autocomplete object to the user's geographical location,
+// as supplied by the browser's 'navigator.geolocation' object.
+function geolocateEnd() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var circle = new google.maps.Circle({
+        center: geolocation,
+        radius: position.coords.accuracy
+      });
+      autocomplete.setBounds(circle.getBounds());
+    });
+  }
+}

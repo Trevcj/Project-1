@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 	
 	<!--google maps link for displaying map--> 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhS8BOLo2dj1DDMCaUmoHhS2ifhkBmNwo"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhS8BOLo2dj1DDMCaUmoHhS2ifhkBmNwo&libraries=places"></script>
 	<!--official key AIzaSyCoeHafkAPgelHRn50olTj12ag1bkmGHnY-->
 	<!--key for when running out of:AIzaSyBhS8BOLo2dj1DDMCaUmoHhS2ifhkBmNwo-->
 	
@@ -39,13 +39,13 @@
 					      	<form>
 							  <div class="form-group">
 							    <label>Starting Location</label>
-							     <input id="startLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
+									<input id="startLocation" onFocus="geolocate()" type="text" class="form-control" name="search" placeholder="Start Location">
 							    
 							  </div>
 								<h4 id="center">-To-</h4>
 							  <div class="form-group">
 							    <label>End Location</label>
-							     <input id="endLocation" type="text" class="form-control" name="search" placeholder="Search Terms">
+									<input id="endLocation" onFocus="geolocateEnd()" type="text" class="form-control" name="search" placeholder="End Location">
 							    
 							  </div>
 							  <div class="form-group">
