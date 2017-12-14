@@ -1,7 +1,16 @@
+//global variables
+var durationTrip;
+var distanceTrip;
+var directionsDisplay;
+var directionsService;
+var map;
+var polyline;
+var path;
+var infowindowMarker = new google.maps.InfoWindow();
+var markers=[];
+
+
 //----------------DIRECTIONS API---------------------
-
-
-
 function directionsURL(startLocation, endLocation){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
@@ -25,41 +34,44 @@ function getDirectionsAPI(){
 //------------------WEATHER API-----------------------------------
 
 
-function undergroundWeatherURL(longitude,latitude){
+function undergroundWeatherAPI(latitude,longitude,marker){
 
   var undergroundWeatherapiKey="b26eea70cef99b97";
 
-  var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+longitude+","+latitude+".json";
-
-  return undergroundWeatherURL;
-}
-
-function getUndergroundweatherAPI(){
-
+  var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+latitude+","+longitude+".json";
+  console.log(undergroundWeatherURL);
   $.ajax({
     //makesure you change this when user inputs
-    url: undergroundWeatherURL(32.2217,-110.9265),
+    url: undergroundWeatherURL,
     method:"GET"
   })
   .done(function(response){
-
-    //checking to see if it returns values
-    //console.log(response.hourly_forecast[0].FCTTIME.hour);
+    var string;
+   
+    if(response.hourly_forecast[0]===" "){
+      string="NO WHEATHER AVAIL FOR THIS LOCATION";
+    }
+    else{
+      var currentTime="Time: "+response.hourly_forecast[0].FCTTIME.pretty;
+      var currentTempt="Temp: "+ response.hourly_forecast[0].temp.english+" °F";
+      var currentCondition=response.hourly_forecast[0].wx;
+      var icon="<img src='"+response.hourly_forecast[0].icon_url+"'>";
+      //var currentPrecipitation="Precipitation: "+response.hourly_forecast[0].FCTTIME.humidity+" %";
+      var currentHumidity="Humidity: "+response.hourly_forecast[0].humidity+" %";
+      var currentWspd="Wind: "+response.hourly_forecast[0].wspd.english+" mph";
+      string=currentTime+"</br>"+currentTempt+"</br>"+currentCondition+"</br>"+icon;
+      
+    }
+    //OPENING WINDOW ABOVE MARKER WHEN CLICKED
+    infowindowMarker.setContent(string);
+    infowindowMarker.open(map,marker);
+    
+          
   
   })
 }
 
 //----------------DISPLAY DIRECTIONS-------------------
-
-var durationTrip;
-var distanceTrip;
-var directionsDisplay;
-var directionsService;
-var map;
-var polyline;
-var path;
-var infowindow = new google.maps.InfoWindow();
-var markers=[];
 
 //map initial when nothing has been inputted
 function initMap() {
@@ -168,11 +180,15 @@ function calcRoute() {
           title:"Location" +(i+1)
         });
 
+        //this is where we will display the weather Conditions
         marker.addListener('click', function(){
-         var contentString = this.getTitle()+"<br>"+this.getPosition().toUrlValue(6);
-        infowindow.setContent(contentString);
-        infowindow.open(map, this);
-
+          var markerPosition=this.getPosition().toUrlValue(6);
+          var array=markerPosition.split(",");
+          var makerPositionLat=array[0];
+          var makerPositionLng=array[1];
+          //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
+          undergroundWeatherAPI(makerPositionLat,makerPositionLng,marker);
+      
         });
         markers.push(marker);
       }
@@ -185,7 +201,7 @@ function calcRoute() {
 }
 
 function createMarker(latlng, label, html, color) {
-  var contentString = '<b>' + label + '</b><br>' + html;
+  var contentString = '<b>' + label +"whats myname" +'</b><br>' + html;
   var marker = new google.maps.Marker({
     position: latlng, 
     map: map,
