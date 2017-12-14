@@ -275,7 +275,7 @@ $("#runSearch").on("click",function(){
     calcRoute();
 
   }
-  //console.log(directionsURL("tucson,arizona","yuma,arizona"));
+  
 
 
 });
