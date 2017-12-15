@@ -21,6 +21,7 @@
 
 #weatherbox {
 	border: solid 1px #ddd;
+	background-image: url(../images/topography.png);
 
 }
 
@@ -44,4 +45,7 @@ footer {
 	padding-top: 15px;
 	margin-top: 15px;
 	border-top:solid 1px #ddd;
+}
+h3 {
+	text-align: center;
 }
