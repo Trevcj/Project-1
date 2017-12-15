@@ -11,10 +11,36 @@ var originObject;
 var destinationObject;
 var waypointObject;
 var waypointPasstime=0;
-var date=0;
-var currentTime=0;;
-var currentMinute=0;
+var date;
+var currentTime;
+var currentMin;
 var string="";
+
+function calcWaypointTime(toWaypointdurationString,currentTime){
+  console.log("intocalctime"+waypointPasstime);
+  waypointPasstime=0;
+  var toWaypointdurationArray=toWaypointdurationString.split(" ");
+  console.log(toWaypointdurationArray);
+  //ADD CHECKER FOR WHEN DURATION IS ONLY MINUTES AND FOR WHEN IS DAYS
+  var toWaypointdurationHr=parseInt(toWaypointdurationArray[0]);
+  console.log(toWaypointdurationHr);
+  var toWaypointdurationMin=parseInt(toWaypointdurationArray[2]);
+  console.log(toWaypointdurationMin);
+  if (toWaypointdurationMin>30){
+    toWaypointdurationHr=toWaypointdurationHr+1;
+  }
+  else{
+    toWaypointsdurationHr=toWaypointdurationHr;
+  }
+  console.log(currentTime);
+  console.log(toWaypointdurationHr);
+  waypointPasstime=currentTime+toWaypointdurationHr;
+  console.log(waypointPasstime);
+  if (waypointPasstime>24){
+    waypointPasstime=(waypointPasstime-24)-1;
+    console.log(waypointPasstime);
+  }
+}
 //----------------DIRECTIONS API---------------------
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
@@ -26,33 +52,18 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
     method:"GET"
   })
   .done(function(response){
+
     var waypointAddress=response.routes[0].legs[0].end_address;
     var toWaypointdurationString=response.routes[0].legs[0].duration.text;
-    waypointPasstime=calcWaypointTime(toWaypointdurationString,currentTime);
+    calcWaypointTime(toWaypointdurationString,currentTime);
     string=string+"</br>"+"<strong>"+waypointAddress+"</strong>";
-    
+   
   });
 }
-function calcWaypointTime(toWaypointdurationString,currentTime){
-  var toWaypointdurationArray=toWaypointdurationString.split(" ");
-  var toWaypointdurationHr=parseInt(toWaypointdurationArray[0]);
-  var toWaypointdurationMin=parseInt(toWaypointdurationArray[2]);
 
-  if (toWaypointdurationMin>30){
-    toWaypointdurationHr=toWaypointdurationHr+1;
-  }
-  else{
-    toWaypointsdurationHr=toWaypointdurationHr;
-  }
-  var passWaypoint=currentTime+toWaypointdurationHr;
-  if (passWaypoint>24){
-    passWaypoint=(passWaypoint-24)-1;
-  }
-  return passWaypoint;
-}
 
 //------------------WEATHER API-----------------------------------
-function undergroundWeatherAPI(latitude,longitude,marker,waypointPasstime){
+function undergroundWeatherAPI(latitude,longitude,marker){
   var undergroundWeatherapiKey="b26eea70cef99b97";
   var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+latitude+","+longitude+".json";
   console.log(undergroundWeatherURL);
@@ -62,20 +73,26 @@ function undergroundWeatherAPI(latitude,longitude,marker,waypointPasstime){
     method:"GET"
   })
   .done(function(response){ 
+    console.log(waypointPasstime)
     if(response.hourly_forecast[0]===" "){
       string="NO WHEATHER AVAIL FOR THIS LOCATION";
     }
     else{
-      console.log(waypointPasstime);
-      var currentTime="Time: "+response.hourly_forecast[0].FCTTIME.pretty;
-      var currentTempt="Temp: "+ response.hourly_forecast[0].temp.english+" °F";
-      var currentCondition=response.hourly_forecast[0].wx;
-      var icon="<img src='"+response.hourly_forecast[0].icon_url+"'>";
-      //var currentPrecipitation="Precipitation: "+response.hourly_forecast[0].FCTTIME.humidity+" %";
-      var currentHumidity="Humidity: "+response.hourly_forecast[0].humidity+" %";
-      var currentWspd="Wind: "+response.hourly_forecast[0].wspd.english+" mph";
-      string=string+"</br>"+currentTime+"</br>"+currentTempt+"</br>"+currentCondition+"</br>"+icon+latitude+","+longitude;
+      for (var i=0; i< response.hourly_forecast.length;i++){
+        var responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
+        if(responseHrinterger===waypointPasstime){
+          //time when passing the waypoint
+          var time=response.hourly_forecast[i].FCTTIME.weekday_name;
+          var weekDay=response.hourly_forecast[i].FCTTIME.civil;
+          var temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
+          var condition=response.hourly_forecast[i].wx;
+          var icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
+          break;
+        }
+      }
+      string=string+"</br>"+weekDay+" "+time+"</br>"+condition+"</br>"+icon+temp;
     }
+
     //OPENING WINDOW ABOVE MARKER WHEN CLICKED
     infowindowMarker.setContent(string);
     infowindowMarker.open(map,marker);
@@ -154,21 +171,23 @@ function calcRoute() {
 
         //this is where we will display the weather Conditions
         marker.addListener('click', function(){
+          
           var clickedMarker=this;
           var markerPositionObj=this.getPosition();
           var markerPosition=this.getPosition().toUrlValue(6);
           var array=markerPosition.split(",");
           var makerPositionLat=array[0];
           var makerPositionLng=array[1];
-          console.log(waypointPasstime);
+       
           //we want the tripduration and thewaypoint name
           directionsAPI(originLat,originLng,makerPositionLat,makerPositionLng);
-          console.log(waypointPasstime);
+          
           //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
-          undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker,waypointPasstime);
+          undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker);
+          
           //resetting the variables used
-          waypointPasstime=0;
           string="";
+          
         });
         markers.push(marker);
       }
@@ -217,17 +236,18 @@ $("#runSearch").on("click",function(){
 
   if(origin&& destination!==" "){
     date=new Date();
-    currentTime=date.getHours();
-    currentMinute=date.getMinutes();
-    if(currentMinute<30){
-      currentTime=currentTime;
+    currentTime=parseInt(date.getHours());
+    currentMin=parseInt(date.getMinutes());
+    if(currentMin>30){
+      currentTime=currentTime+1;
+     
     }
     else{
-      currenTime=currentTime+1;
+      currenTime=currentTime;
     }
-    
+    console.log(currentTime);
+    console.log(currentMin);
     calcRoute();
-
   }
 
 });
