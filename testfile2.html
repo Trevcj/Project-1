@@ -7,8 +7,11 @@
      <meta charset="utf-8">
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
      <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI"></script>
      <script type="text/javascript" src="assets/javascript/epolyv3.js"></script> 
+     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+
      <script>
 
 var directionDisplay;
@@ -80,16 +83,35 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
       for (var i=0; i<gmarkers.length; i++) {
         gmarkers[i].setMap(null);
       }
+
+
+
       gmarkers = [];
       var points = polyline.GetPointsAtDistance(1609.34 * (document.getElementById('mileValue').value));
       for (var i=0; i<points.length; i++) {
-         var marker = new google.maps.Marker({
-           map: map,
-           position: points[i],
-           title: "Location " + (i+1)
-         });
-         marker.addListener('click', openInfoWindow);
-         gmarkers.push(marker);
+
+        var wundergroundURL = "http://api.wunderground.com/api/b26eea70cef99b97/conditions/q/"+points[i].lat()+","+points[i].lng()+".jsonp"
+        console.log(points[i].lat()+","+points[i].lng());
+        $.ajax({
+          url : wundergroundURL,
+          success : function(parsed_json) {
+            var location = parsed_json['current_observation']['display_location']['city'];
+            var temp_f = parsed_json['current_observation']['temp_f'];
+      //      infowindow.setContent("Current temperature in " + location + " is: " + temp_f);
+            console.log(("Current temperature in " + location + " is: " + temp_f));
+  //          infowindow.open(map);
+
+            var marker = new google.maps.Marker({
+              map: map,
+              position: points[i],
+              title: location + " is: " + temp_f
+            });
+            console.log("does this run?");
+            // openInfoWindow();
+//            marker.addListener('click', openInfoWindow);
+            gmarkers.push(marker);
+          }
+        });
       }
 
     } else {
@@ -111,17 +133,37 @@ function createMarker(latlng, label, html, color) {
   marker.myname = label;
   gmarkers.push(marker);
 
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(contentString);
-    infowindow.open(map, marker);
-  });
+  // google.maps.event.addListener(marker, 'click', function() {
+  //   infowindow.setContent(contentString);
+  //   infowindow.open(map, marker);
+  // });
   return marker;
 }
+
+// Call Wunderground API and Display info
+
+// function openInfoWindow() {
+//     var contentString = this.getTitle()+"<br>"+this.getPosition().toUrlValue(6);
+//     infowindow.setContent(contentString);
+//     infowindow.open(map, this);
+
 function openInfoWindow() {
-    var contentString = this.getTitle()+"<br>"+this.getPosition().toUrlValue(6);
-    infowindow.setContent(contentString);
-    infowindow.open(map, this);
+  console.log(this.getPosition().lat()+","+this.getPosition().lng());
+  var wundergroundURL = "http://api.wunderground.com/api/b26eea70cef99b97/conditions/q/"+this.getPosition().lat()+","+this.getPosition().lng()+".jsonp"
+
+  $.ajax({
+    url : wundergroundURL,
+    success : function(parsed_json) {
+      var location = parsed_json['current_observation']['display_location']['city'];
+      var temp_f = parsed_json['current_observation']['temp_f'];
+      infowindow.setContent("Current temperature in " + location + " is: " + temp_f);
+      console.log(("Current temperature in " + location + " is: " + temp_f));
+      infowindow.open(map);
+    }
+  });
 }
+
+
 var icons = new Array();
 icons["red"] = {url: "http://maps.google.com/mapfiles/ms/micons/red.png"};
 
