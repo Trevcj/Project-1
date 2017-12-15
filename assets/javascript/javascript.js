@@ -9,20 +9,27 @@ var infowindowMarker = new google.maps.InfoWindow();
 var markers=[];
 var originObject;
 var destinationObject;
+var waypointObject;
+var waypointName;
+var timetoReachwaypoint;
+var date;
+var currentTime;
+var currentMinute;
+var string;
 //----------------DIRECTIONS API---------------------
-function directionsURL(startLocation, endLocation){
+function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
-  var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+startLocation+"&destination="+endLocation+"&key="+directionsKEY;
-  return directionsURL;
-}
-
-function getDirectionsAPI(){
+  var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
+  console.log(directionsURL);
   $.ajax({
-    url: directionsURL(startLocation,endLocation),
+    url: directionsURL,
     method:"GET"
   })
   .done(function(response){
+    var waypointAddress=response.routes[0].legs[0].end_address;
+    string=string+"</br>"+waypointAddress;
+    console.log(waypointAddress);
   });
 }
 
@@ -37,7 +44,7 @@ function undergroundWeatherAPI(latitude,longitude,marker){
     method:"GET"
   })
   .done(function(response){
-    var string;
+   
     if(response.hourly_forecast[0]===" "){
       string="NO WHEATHER AVAIL FOR THIS LOCATION";
     }
@@ -49,7 +56,7 @@ function undergroundWeatherAPI(latitude,longitude,marker){
       //var currentPrecipitation="Precipitation: "+response.hourly_forecast[0].FCTTIME.humidity+" %";
       var currentHumidity="Humidity: "+response.hourly_forecast[0].humidity+" %";
       var currentWspd="Wind: "+response.hourly_forecast[0].wspd.english+" mph";
-      string=currentTime+"</br>"+currentTempt+"</br>"+currentCondition+"</br>"+icon;
+      string=string+"</br>"+currentTime+"</br>"+currentTempt+"</br>"+currentCondition+"</br>"+icon+latitude+","+longitude;
     }
     //OPENING WINDOW ABOVE MARKER WHEN CLICKED
     infowindowMarker.setContent(string);
@@ -91,8 +98,10 @@ function calcRoute() {
   directionsService.route(request, function(response, status) {
     if (status == "OK" ) {
       //objects with lat and lng as functions
-      origin=response.routes[0].legs[0].start_location;
-      destination=response.routes[0].legs[0].end_location;
+      originObject=response.routes[0].legs[0].start_location;
+      originLat=originObject.lat();
+      originLng=originObject.lng();
+      destinationObject=response.routes[0].legs[0].end_location;
       //directionsDisplay.setDirections(response);
       polyline.setPath([]);
       var bounds=new google.maps.LatLngBounds();
@@ -116,7 +125,7 @@ function calcRoute() {
       markers=[];
       var mileValue=$("#mileValue option:selected").val();
       //creating the points along the polyline
-      var points=getPointsAtDistance((mileValue*1609.34),origin,destination);
+      var points=getPointsAtDistance((mileValue*1609.34),originObject,destinationObject);
       for(var i=0;i<points.length;i++){
         //two marker declarations
         var marker = new google.maps.Marker({
@@ -128,12 +137,17 @@ function calcRoute() {
         //this is where we will display the weather Conditions
         marker.addListener('click', function(){
           var clickedMarker=this;
+          var markerPositionObj=this.getPosition();
           var markerPosition=this.getPosition().toUrlValue(6);
           var array=markerPosition.split(",");
           var makerPositionLat=array[0];
           var makerPositionLng=array[1];
+
+          //we want the tripduration and thewaypoint name
+          directionsAPI(originLat,originLng,makerPositionLat,makerPositionLng);
           //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
           undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker);
+          string="";
         });
         markers.push(marker);
       }
@@ -179,7 +193,23 @@ $("#runSearch").on("click",function(){
   var origin=$("#startLocation").val().trim();
   var destination=$("#startLocation").val().trim();
   
-  if(startLocation&& endLocation !==" "){
+
+  if(origin&& destination!==" "){
+    
+    date=new Date();
+    console.log(date);
+    currentTime=date.getHours();
+    console.log(currentTime);
+    currentMinute=date.getMinutes();
+    console.log(currentMinute);
+    
+    if(currentMinute<30){
+      currentTime=currentTime;
+    }
+    else{
+      currenTime=currentTime+1;
+    }
+    
     calcRoute();
 
   }
@@ -250,8 +280,6 @@ function initAutocompleteEnd() {
   // fields in the form.
   autocomplete.addListener('place_changed', geolocateEnd);
 }
-
-
 
 // Bias the autocomplete object to the user's geographical location,
 // as supplied by the browser's 'navigator.geolocation' object.
