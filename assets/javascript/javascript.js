@@ -11,11 +11,12 @@ var originObject;
 var destinationObject;
 var waypointObject;
 var waypointPasstime=0;
-var date;
+var currentDayoftheYear;
 var currentTime;
 var currentMin;
 var string="";
-var durationDays;
+var durationDays=0;
+var responseGlobal;
 
 function waypointDuration(toWaypointdurationString){
   var toWaypointdurationArray=toWaypointdurationString.split(" ");
@@ -25,51 +26,62 @@ function waypointDuration(toWaypointdurationString){
   console.log(toWaypointdurationArray);
   switch (arrayLength){
     case 2:
+      durationDays=0;
       toWaypointdurationMin=parseInt(toWaypointdurationArray[0]);
       if(toWaypointdurationMin>30){
         toWaypointdurationHr=1;
-        console.log("im here1")
+        toWaypointdurationMin=0;
+        console.log("case2")
       }
       else{
+        durationDays=0;
         toWaypointdurationHr=0;
-        console.log("im here2")
+        console.log("case2 else")
+
       }
     break;
     case 4:
+    
       if(toWaypointdurationArray[1]==="hours"||toWaypointdurationArray[1]==="hour"){
         toWaypointdurationHr=parseInt(toWaypointdurationArray[0]);
         toWaypointdurationMin=parseInt(toWaypointdurationArray[2]);
-        console.log("im here");
+        durationDays=0;
+        console.log("case4 nodays");
       }
-     else{
-      toWaypointdurationHr=parseInt(toWaypointdurationArray[2]);
-      toWaypointdurationMin=0;
-      durationDays=parseInt(toWaypointdurationArray[0]);
-      console.log("im here3");
-     }
+      else{
+        toWaypointdurationHr=parseInt(toWaypointdurationArray[2]);
+        toWaypointdurationMin=0;
+        durationDays=parseInt(toWaypointdurationArray[0]);
+        console.log("case4");
+       }
     break;
   }
   console.log(toWaypointdurationHr);
   console.log(toWaypointdurationMin);
   console.log(durationDays);
   calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr);
-  
 }
 function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
   waypointPasstime=0;
-  if (toWaypointdurationMin>30){
-    toWaypointdurationHr=toWaypointdurationHr+1;
+  console.log("current"+currentTime);
+  if(durationDays===0){
+    
+    if (toWaypointdurationMin>30){
+      toWaypointdurationHr=toWaypointdurationHr+1;
+    }
+    if (waypointPasstime>24){
+      waypointPasstime=(waypointPasstime-24)-1;
+      //CHECK FOR WHEN THE HRS GO AVOVE
+      durationDays++;
+    }
+    waypointPasstime=currentTime+toWaypointdurationHr;
+    console.log("currentTime"+currentTime);
+    console.log("toWaypointdurationHr"+toWaypointdurationHr);
   }
   else{
-    toWaypointsdurationHr=toWaypointdurationHr;
-  }
-  waypointPasstime=currentTime+toWaypointdurationHr;
-  console.log("currentTime"+currentTime);
-  console.log("toWaypointdurationHr"+toWaypointdurationHr);
-  if (waypointPasstime>24){
-    waypointPasstime=(waypointPasstime-24)-1;
-  }
-  console.log(waypointPasstime)
+    waypointPasstime=toWaypointdurationHr;
+  } 
+  console.log(waypointPasstime);
 }
 //----------------DIRECTIONS API---------------------
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
@@ -85,14 +97,12 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
 
     var waypointAddress=response.routes[0].legs[0].end_address;
     var toWaypointdurationString=response.routes[0].legs[0].duration.text;
-
     //determine if waypoint is mins/hrs/days
     waypointDuration(toWaypointdurationString);
     string=string+"</br>"+"<strong>"+waypointAddress+"</strong>";
    
   });
 }
-
 
 //------------------WEATHER API-----------------------------------
 function undergroundWeatherAPI(latitude,longitude,marker){
@@ -105,29 +115,74 @@ function undergroundWeatherAPI(latitude,longitude,marker){
     method:"GET"
   })
   .done(function(response){ 
+    var time;
+    var weekDay;
+    var temp;
+    var condition;
+    var icon;
+    var dayIndex;
+    var responseHrinterger;
+    var yday;
+    var day;
+    var dayWeatherArray=[];
+    console.log("WeatdurationDays"+durationDays);
+    console.log("waypointsPasstime"+waypointPasstime);
+    console.log(dayWeatherArray);
     if(response.hourly_forecast[0]===" "){
       string="NO WHEATHER AVAIL FOR THIS LOCATION";
     }
     else{
-      for (var i=0; i< response.hourly_forecast.length;i++){
-        var responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
-        if(responseHrinterger===waypointPasstime){
-          //time when passing the waypoint
-          var time=response.hourly_forecast[i].FCTTIME.weekday_name;
-          var weekDay=response.hourly_forecast[i].FCTTIME.civil;
-          var temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
-          var condition=response.hourly_forecast[i].wx;
-          var icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
-          break;
+      if(durationDays===0){
+        for(var i=0;i<response.hourly_forecast.length;i++){
+          responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
+          if(responseHrinterger===waypointPasstime){
+            dayIndex=i;
+            break;
+          }
         }
       }
-      string=string+"</br>"+weekDay+" "+time+"</br>"+condition+"</br>"+icon+temp;
-    }
+      else{
+        console.log("gots days");
+        yday=currentDayoftheYear+durationDays;
+        for(var i=0;i<response.hourly_forecast.length;i++){
+          day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
+          responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
+          if(responseHrinterger===waypointPasstime&&day===yday){
+            dayIndex=i;
+          }
+        }
+        
+        /*for(var i=0;i<response.hourly_forecast.length;i++){
+          day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
+          if(day===yday){
+            dayWeatherArray.push(response.hourly_forecast[i].FCTTIME);
+          }
+        }
+        for(var i=0;i<dayWeatherArray.length;i++){
+          responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
+          if(responseHrinterger===waypointPasstime){
+            dayIndex=i;
+            break;
+          }
+        }*/
+      }
+        console.log("dayIndex"+dayIndex);
+       
+        time=response.hourly_forecast[dayIndex].FCTTIME.weekday_name;
+        weekDay=response.hourly_forecast[dayIndex].FCTTIME.civil;
+        temp="Temp: "+ response.hourly_forecast[dayIndex].temp.english+" °F";
+        condition=response.hourly_forecast[dayIndex].wx;
+        icon="<img src='"+response.hourly_forecast[dayIndex].icon_url+"'>";
+      
 
-    //OPENING WINDOW ABOVE MARKER WHEN CLICKED
-    infowindowMarker.setContent(string);
-    infowindowMarker.open(map,marker);
-  })
+      string=string+"</br>"+weekDay+" "+time+"</br>"+condition+"</br>"+icon+temp;
+
+      //OPENING WINDOW ABOVE MARKER WHEN CLICKED
+      infowindowMarker.setContent(string);
+      infowindowMarker.open(map,marker);
+      
+    }
+  });
 }
 
 //----------------DISPLAY DIRECTIONS-------------------
@@ -263,12 +318,27 @@ $("#runSearch").on("click",function(){
 
   var origin=$("#startLocation").val().trim();
   var destination=$("#startLocation").val().trim();
-  
+  /*var now = new Date();
+var start = new Date(now.getFullYear(), 0, 0);
+var diff = now - start;
+var oneDay = 1000 * 60 * 60 * 24;
+var day = Math.floor(diff / oneDay);
+console.log('Day of year: ' + day);*/ 
 
   if(origin&& destination!==" "){
-    date=new Date();
-    currentTime=parseInt(date.getHours());
-    currentMin=parseInt(date.getMinutes());
+
+    //calculatingtodaysyearday
+    var currentDate=new Date();
+    var firstDateoftheYear = new Date(currentDate.getFullYear(), 0, 0);
+    var diff = currentDate - firstDateoftheYear;
+    var oneDay = 1000 * 60 * 60 * 24;
+    //without the -1 it gives me a day ahead CKECK
+    currentDayoftheYear = (Math.floor(diff / oneDay))-1;
+    console.log(currentDayoftheYear);
+
+    //getting the current time hr and minutes
+    currentTime=parseInt(currentDate.getHours());
+    currentMin=parseInt(currentDate.getMinutes());
     if(currentMin>30){
       currentTime=currentTime+1;
      
@@ -276,8 +346,8 @@ $("#runSearch").on("click",function(){
     else{
       currenTime=currentTime;
     }
-    console.log(currentTime);
-    console.log(currentMin);
+    //console.log(currentTime);
+    //console.log(currentMin);
     calcRoute();
   }
 
