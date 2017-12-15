@@ -15,38 +15,64 @@ var date;
 var currentTime;
 var currentMin;
 var string="";
+var durationDays;
 
-function calcWaypointTime(toWaypointdurationString,currentTime){
-  console.log("intocalctime"+waypointPasstime);
-  waypointPasstime=0;
+function waypointDuration(toWaypointdurationString){
   var toWaypointdurationArray=toWaypointdurationString.split(" ");
+  var arrayLength=toWaypointdurationArray.length;
+  var toWaypointdurationHr;
+  var toWaypointdurationMin;
   console.log(toWaypointdurationArray);
-  //ADD CHECKER FOR WHEN DURATION IS ONLY MINUTES AND FOR WHEN IS DAYS
-  var toWaypointdurationHr=parseInt(toWaypointdurationArray[0]);
+  switch (arrayLength){
+    case 2:
+      toWaypointdurationMin=parseInt(toWaypointdurationArray[0]);
+      if(totoWaypointdurationMin>30){
+        toWaypointdurationHr=1;
+      }
+      else{
+        toWaypointdurationHr=0;
+      }
+    break;
+    case 4:
+      if(toWaypointdurationArray[1]==="hours"||toWaypointdurationArray[1]==="hour"){
+        toWaypointdurationHr=parseInt(toWaypointdurationArray[0]);
+        toWaypointdurationMin=parseInt(toWaypointdurationArray[2]);
+        console.log("im here");
+      }
+     else{
+      toWaypointdurationHr=parseInt(toWaypointdurationArray[2]);
+      toWaypointdurationMin=0;
+      durationDays=parseInt(toWaypointdurationArray[0]);
+      console.log("im here3");
+     }
+    break;
+  }
   console.log(toWaypointdurationHr);
-  var toWaypointdurationMin=parseInt(toWaypointdurationArray[2]);
   console.log(toWaypointdurationMin);
+  console.log(durationDays);
+  calcWaypointTime(toWaypointdurationHr,toWaypointdurationMin);
+  
+}
+function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
+  waypointPasstime=0;
   if (toWaypointdurationMin>30){
     toWaypointdurationHr=toWaypointdurationHr+1;
   }
   else{
     toWaypointsdurationHr=toWaypointdurationHr;
   }
-  console.log(currentTime);
-  console.log(toWaypointdurationHr);
   waypointPasstime=currentTime+toWaypointdurationHr;
-  console.log(waypointPasstime);
   if (waypointPasstime>24){
     waypointPasstime=(waypointPasstime-24)-1;
-    console.log(waypointPasstime);
   }
+  console.log(waypointPasstime)
 }
 //----------------DIRECTIONS API---------------------
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
   var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
-  //console.log(directionsURL);
+  console.log(directionsURL);
   $.ajax({
     url: directionsURL,
     method:"GET"
@@ -55,7 +81,9 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
 
     var waypointAddress=response.routes[0].legs[0].end_address;
     var toWaypointdurationString=response.routes[0].legs[0].duration.text;
-    calcWaypointTime(toWaypointdurationString,currentTime);
+
+    //determine if waypoint is mins/hrs/days
+    waypointDuration(toWaypointdurationString);
     string=string+"</br>"+"<strong>"+waypointAddress+"</strong>";
    
   });
@@ -65,7 +93,7 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
 //------------------WEATHER API-----------------------------------
 function undergroundWeatherAPI(latitude,longitude,marker){
   var undergroundWeatherapiKey="b26eea70cef99b97";
-  var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+latitude+","+longitude+".json";
+  var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+latitude+","+longitude+".json";
   console.log(undergroundWeatherURL);
   $.ajax({
     //makesure you change this when user inputs
@@ -73,7 +101,6 @@ function undergroundWeatherAPI(latitude,longitude,marker){
     method:"GET"
   })
   .done(function(response){ 
-    console.log(waypointPasstime)
     if(response.hourly_forecast[0]===" "){
       string="NO WHEATHER AVAIL FOR THIS LOCATION";
     }
