@@ -26,11 +26,13 @@ function waypointDuration(toWaypointdurationString){
   switch (arrayLength){
     case 2:
       toWaypointdurationMin=parseInt(toWaypointdurationArray[0]);
-      if(totoWaypointdurationMin>30){
+      if(toWaypointdurationMin>30){
         toWaypointdurationHr=1;
+        console.log("im here1")
       }
       else{
         toWaypointdurationHr=0;
+        console.log("im here2")
       }
     break;
     case 4:
@@ -50,7 +52,7 @@ function waypointDuration(toWaypointdurationString){
   console.log(toWaypointdurationHr);
   console.log(toWaypointdurationMin);
   console.log(durationDays);
-  calcWaypointTime(toWaypointdurationHr,toWaypointdurationMin);
+  calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr);
   
 }
 function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
@@ -62,6 +64,8 @@ function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
     toWaypointsdurationHr=toWaypointdurationHr;
   }
   waypointPasstime=currentTime+toWaypointdurationHr;
+  console.log("currentTime"+currentTime);
+  console.log("toWaypointdurationHr"+toWaypointdurationHr);
   if (waypointPasstime>24){
     waypointPasstime=(waypointPasstime-24)-1;
   }
