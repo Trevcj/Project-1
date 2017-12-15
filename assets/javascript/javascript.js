@@ -5,9 +5,10 @@ var directionsDisplay;
 var directionsService;
 var map;
 var polyline;
-var path;
 var infowindowMarker = new google.maps.InfoWindow();
 var markers=[];
+var originObject;
+var destinationObject;
 //----------------DIRECTIONS API---------------------
 function directionsURL(startLocation, endLocation){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
@@ -90,6 +91,9 @@ function calcRoute() {
 
   directionsService.route(request, function(response, status) {
     if (status == "OK" ) {
+      //objects with lat and lng as functions
+      origin=response.routes[0].legs[0].start_location;
+      destination=response.routes[0].legs[0].end_location;
       //directionsDisplay.setDirections(response);
       polyline.setPath([]);
       var bounds=new google.maps.LatLngBounds();
@@ -113,7 +117,7 @@ function calcRoute() {
       markers=[];
       var mileValue=$("#mileValue option:selected").val();
       //creating the points along the polyline
-      var points=getPointsAtDistance(mileValue*1609.34);
+      var points=getPointsAtDistance((mileValue*1609.34),origin,destination);
       for(var i=0;i<points.length;i++){
         //two marker declarations
         var marker = new google.maps.Marker({
@@ -141,7 +145,7 @@ function calcRoute() {
   }); 
 }
 //had to turn this to a function from eopoly.js because it was not being read
-function getPointsAtDistance(meters){
+function getPointsAtDistance(meters,origin,destination){
   var next = meters;
   var points = [];
   // some awkward special cases
@@ -150,7 +154,7 @@ function getPointsAtDistance(meters){
   }
   var dist=0;
   var olddist=0;
-  for (var i=1; (i < polyline.getPath().getLength()); i++) {
+  for (var i=1; i < polyline.getPath().getLength(); i++) {
     olddist = dist;
     //distanceFrom is from epoly.js
     dist += polyline.getPath().getAt(i).distanceFrom(polyline.getPath().getAt(i-1));
@@ -162,6 +166,9 @@ function getPointsAtDistance(meters){
       next += meters;    
     }
   }
+  //adding the starting and ending locations to the points array
+  points.push(destination);
+  points.unshift(origin);
   return points;
 }
 
