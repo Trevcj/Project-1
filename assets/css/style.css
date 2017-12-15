@@ -2,9 +2,13 @@
 	background-image: url(../images/topography.png);
 	text-align: center;
 	color: #777;
-	border-bottom: solid 1px #ddd;
+	border-left: 1px #ddd solid;
+	border-right: 1px #ddd solid;
+	border-bottom: 1px #ddd solid;
+	width: 84.5%;
+	margin: auto;
+	margin-bottom: 15px;
 }
-
 .sidenav {
 	background-image: url(../images/topography.png);
 	border: solid 1px #ddd;
@@ -32,6 +36,7 @@
 }
 #mapBody{
 	margin-bottom: 15px;
+	height: 450px;
 }
 footer {
 	text-align: center;

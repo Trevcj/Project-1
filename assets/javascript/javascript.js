@@ -3,7 +3,7 @@
 
 
 function directionsURL(startLocation, endLocation){
-	var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
+	var directionsKEY = "AIzaSyBPziLCLR3gj6MHvDJjQFrNrKdz6qOdV9c";
 
 
 	var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+startLocation+"&destination="+endLocation+"&key="+directionsKEY;
@@ -19,7 +19,7 @@ function getDirectionsAPI(){
 		method:"GET"
 	})
 	.done(function(response){
-
+		
 		
 
 
@@ -52,12 +52,15 @@ function getUndergroundweatherAPI(){
 
 		//checking to see if it returns values
 		//console.log(response.hourly_forecast[0].FCTTIME.hour);
-	
+		
 	})
 }
 
 //----------------DISPLAY DIRECTIONS-------------------
-
+var startLat;
+var endLat;
+var startLong;
+var endLong;
 var durationTrip;
 var distanceTrip;
 var directionsDisplay;
@@ -76,14 +79,14 @@ function initMap() {
   	directionsDisplay = new google.maps.DirectionsRenderer();
 	var Tucson= new google.maps.LatLng(32.2217,-110.9265);
   	var mapOptions = {
-   		zoom:3,
+   		zoom:7,
     	center:Tucson
-    
 	}
+	
  
 	map = new google.maps.Map(document.getElementById("mapBody"), mapOptions);
 	directionsDisplay.setMap(map);
-
+	
 }
 
 
@@ -98,14 +101,23 @@ function calcRoute() {
   directionsService.route(request, function(result, status) {
     if (status == 'OK') {
       directionsDisplay.setDirections(result);
-    }
+	}
   });
+
 
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
       directionsDisplay.setDirections(response);
       durationTrip=response.routes[0].legs[0].duration.text;
-      distanceTrip=response.routes[0].legs[0].distance.text;
+	  distanceTrip=response.routes[0].legs[0].distance.text;
+	  startLat = response.routes[0].legs[0].start_location.lat();
+	  startLong = response.routes[0].legs[0].start_location.lng();
+	  endLat = response.routes[0].legs[0].end_location.lat();
+	  endLong = response.routes[0].legs[0].end_location.lng();
+	  console.log(startLat, startLong, endLat, endLong);
+	  console.log(response);
+
+
       
       var infowindow = new google.maps.InfoWindow();
       infowindow.setContent( "<strong>"+durationTrip+"</strong>"+ "<br>" + distanceTrip + " ");
@@ -114,10 +126,12 @@ function calcRoute() {
       infowindow.setPosition(response.routes[0].legs[0].end_location);
      
       infowindow.open(map);
-    }
+	}
+	
+
   });
   
-  
+
  
 }
 
@@ -129,11 +143,11 @@ function calcRoute() {
 $("#runSearch").on("click",function(){
 
 	var startLocation=$("#startLocation").val().trim();
-	var endLocation=$("#startLocation").val().trim();
+	var endLocation=$("#endLocation").val().trim();
 
 	
 
-	if(startLocation&& endLocation !==" "){
+	if(startLocation && endLocation !==" "){
 		calcRoute();
 
 	}
