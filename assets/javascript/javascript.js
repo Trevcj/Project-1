@@ -10,45 +10,63 @@ var markers=[];
 var originObject;
 var destinationObject;
 var waypointObject;
-var waypointName;
-var timetoReachwaypoint;
-var date;
-var currentTime;
-var currentMinute;
-var string;
+var waypointPasstime=0;
+var date=0;
+var currentTime=0;;
+var currentMinute=0;
+var string="";
 //----------------DIRECTIONS API---------------------
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
   var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
-  console.log(directionsURL);
+  //console.log(directionsURL);
   $.ajax({
     url: directionsURL,
     method:"GET"
   })
   .done(function(response){
     var waypointAddress=response.routes[0].legs[0].end_address;
-    string=string+"</br>"+waypointAddress;
-    console.log(waypointAddress);
+    var toWaypointdurationString=response.routes[0].legs[0].duration.text;
+    waypointPasstime=calcWaypointTime(toWaypointdurationString,currentTime);
+    string=string+"</br>"+"<strong>"+waypointAddress+"</strong>";
+    
   });
+}
+function calcWaypointTime(toWaypointdurationString,currentTime){
+  var toWaypointdurationArray=toWaypointdurationString.split(" ");
+  var toWaypointdurationHr=parseInt(toWaypointdurationArray[0]);
+  var toWaypointdurationMin=parseInt(toWaypointdurationArray[2]);
+
+  if (toWaypointdurationMin>30){
+    toWaypointdurationHr=toWaypointdurationHr+1;
+  }
+  else{
+    toWaypointsdurationHr=toWaypointdurationHr;
+  }
+  var passWaypoint=currentTime+toWaypointdurationHr;
+  if (passWaypoint>24){
+    passWaypoint=(passWaypoint-24)-1;
+  }
+  return passWaypoint;
 }
 
 //------------------WEATHER API-----------------------------------
-function undergroundWeatherAPI(latitude,longitude,marker){
+function undergroundWeatherAPI(latitude,longitude,marker,waypointPasstime){
   var undergroundWeatherapiKey="b26eea70cef99b97";
   var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+latitude+","+longitude+".json";
-  //console.log(undergroundWeatherURL);
+  console.log(undergroundWeatherURL);
   $.ajax({
     //makesure you change this when user inputs
     url: undergroundWeatherURL,
     method:"GET"
   })
-  .done(function(response){
-   
+  .done(function(response){ 
     if(response.hourly_forecast[0]===" "){
       string="NO WHEATHER AVAIL FOR THIS LOCATION";
     }
     else{
+      console.log(waypointPasstime);
       var currentTime="Time: "+response.hourly_forecast[0].FCTTIME.pretty;
       var currentTempt="Temp: "+ response.hourly_forecast[0].temp.english+" °F";
       var currentCondition=response.hourly_forecast[0].wx;
@@ -142,11 +160,14 @@ function calcRoute() {
           var array=markerPosition.split(",");
           var makerPositionLat=array[0];
           var makerPositionLng=array[1];
-
+          console.log(waypointPasstime);
           //we want the tripduration and thewaypoint name
           directionsAPI(originLat,originLng,makerPositionLat,makerPositionLng);
+          console.log(waypointPasstime);
           //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
-          undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker);
+          undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker,waypointPasstime);
+          //resetting the variables used
+          waypointPasstime=0;
           string="";
         });
         markers.push(marker);
@@ -195,14 +216,9 @@ $("#runSearch").on("click",function(){
   
 
   if(origin&& destination!==" "){
-    
     date=new Date();
-    console.log(date);
     currentTime=date.getHours();
-    console.log(currentTime);
     currentMinute=date.getMinutes();
-    console.log(currentMinute);
-    
     if(currentMinute<30){
       currentTime=currentTime;
     }
