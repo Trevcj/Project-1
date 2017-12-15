@@ -168,8 +168,6 @@ function getPointsAtDistance(meters,origin,destination){
   //adding the starting and ending locations to the points array
   points.push(destination);
   points.unshift(origin);
-  points[0].lat();
-  points[0].lng();
   return points;
 }
 
