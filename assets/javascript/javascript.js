@@ -180,59 +180,7 @@ $("#runSearch").on("click",function(){
   }
 });
 
-    // function detailedWeather(){
-    //   var detailPoints = polyline.GetPointsAtDistance(1609.34 * (document.getElementById('mileValue').value));
-    //   for (var i=0; i<detailPoints.length; i++) {
-
-    //     var wundergroundURL = "http://api.wunderground.com/api/b26eea70cef99b97/conditions/q/"+detailPoints[i].lat()+","+detailPoints[i].lng()+".jsonp"
-    //     console.log(detailPoints[i].lat()+","+detailPoints[i].lng());
-    //     $.ajax({
-    //       url : wundergroundURL,
-    //       success : function(parsed_json) {
-    //         var location = parsed_json['current_observation']['display_location']['city'];
-    //         var temp_f = parsed_json['current_observation']['temp_f'];
-    //   //      infowindow.setContent("Current temperature in " + location + " is: " + temp_f);
-    //         console.log(("Current temperature in " + location + " is: " + temp_f));
-    //       }
-    //     });
-    //   };
-    // };
-
-
-
-
-
-// function detailedWeather(){
-//   for (var i = 0; i < points.length; i++) {
-//     console.log("http://api.wunderground.com/api/b26eea70cef99b97/hourly/q/"+points[i].lat()+","+points[i].lng()+".json");
-
-    // $.ajax({
-    //   url : "http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+points[i].lat()+","+points[i].lng()+".json",
-    //   dataType : "jsonp",
-    //   success : function(parsed_json) {
-    //     var weatherListItem = $("<li>");
-    //     var listItemTime = "Time: "+response.hourly_forecast[0].FCTTIME.pretty;
-    //     var lsitItemTemp_F = "Temp: "+ response.hourly_forecast[0].temp.english+" °F";
-    //     var listItemFeelsLikeTemp_F = response.hourly_forecast[0].feelslike
-    //     var listItemConditionsImg = "<img src='"+response.hourly_forecast[0].icon_url+"'>";
-    //     var listItemConditions = response.hourly_forecast[0].wx;
-    //     var listItemWind = "Wind: "+response.hourly_forecast[0].wspd.english+" mph";
-    //     var listItemHumidity = "Humidity: "+response.hourly_forecast[0].humidity+" %";
-    //     alert("Current temperature in " + location + " is: " + temp_f);
-    //   }
-    // });
-//   }
-// };
-
-
-
-
-
-
-
-
-
-
+//Function to Fill the bottom div
 function detailedWeather(){
   console.log("detailedWeather() called")
   var detailPoints = polyline.GetPointsAtDistance(1609.34 * (document.getElementById('mileValue').value));
