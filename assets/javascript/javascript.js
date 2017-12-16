@@ -76,8 +76,8 @@ function initMap() {
   });
 
   //autocompletelocation
-  initAutocomplete();
-  initAutocompleteEnd();
+  initAutocomplete("startLocation");
+  initAutocomplete("endLocation");
 }
 
 //calculates the route
@@ -198,11 +198,12 @@ var componentForm = {
   postal_code: 'short_name'
 };
 
-function initAutocomplete() {
+function initAutocomplete(location) {
   // Create the autocomplete object, restricting the search to geographical
   // location types.
   autocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('startLocation')),
+      /** @type {!HTMLInputElement} */(document.getElementById(location)),
+
       {types: ['geocode']});
 
   // When the user selects an address from the dropdown, populate the address
@@ -230,23 +231,8 @@ function geolocate() {
   }
 }
 
- var placeSearch, autocomplete;
-var componentForm = {
-  street_number: 'short_name2',
-  route: 'long_name2',
-  locality: 'long_name2',
-  administrative_area_level_1: 'short_name2',
-  country: 'long_name2',
-  postal_code: 'short_name2'
-};
 
-function initAutocompleteEnd() {
-  // Create the autocomplete object, restricting the search to geographical
-  // location types.
-  autocomplete = new google.maps.places.Autocomplete(
-      /** @type {!HTMLInputElement} */(document.getElementById('endLocation')),
-      {types: ['geocode']});
-
+<<<<<<< HEAD
   // When the user selects an address from the dropdown, populate the address
   // fields in the form.
   autocomplete.addListener('place_changed', geolocateEnd);
@@ -274,3 +260,5 @@ function geolocateEnd() {
 // $(".list-group-item").mouseover(function() {
 //   $(".list-group-item").addClass("active")
 // })
+=======
+>>>>>>> 3e0c20d71175e6b96ecb79f29b1a5c31e9ccba83
