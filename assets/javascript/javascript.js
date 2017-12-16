@@ -88,6 +88,7 @@ function calcRoute() {
     travelMode: 'DRIVING'
   };
 
+
   directionsService.route(request, function(response, status) {
     if (status == "OK" ) {
       //directionsDisplay.setDirections(response);
@@ -175,30 +176,96 @@ $("#runSearch").on("click",function(){
   
   if(startLocation&& endLocation !==" "){
     calcRoute();
-
+    detailedWeather();
   }
+});
+
+    // function detailedWeather(){
+    //   var detailPoints = polyline.GetPointsAtDistance(1609.34 * (document.getElementById('mileValue').value));
+    //   for (var i=0; i<detailPoints.length; i++) {
+
+    //     var wundergroundURL = "http://api.wunderground.com/api/b26eea70cef99b97/conditions/q/"+detailPoints[i].lat()+","+detailPoints[i].lng()+".jsonp"
+    //     console.log(detailPoints[i].lat()+","+detailPoints[i].lng());
+    //     $.ajax({
+    //       url : wundergroundURL,
+    //       success : function(parsed_json) {
+    //         var location = parsed_json['current_observation']['display_location']['city'];
+    //         var temp_f = parsed_json['current_observation']['temp_f'];
+    //   //      infowindow.setContent("Current temperature in " + location + " is: " + temp_f);
+    //         console.log(("Current temperature in " + location + " is: " + temp_f));
+    //       }
+    //     });
+    //   };
+    // };
+
+
+
+
+
+// function detailedWeather(){
+//   for (var i = 0; i < points.length; i++) {
+//     console.log("http://api.wunderground.com/api/b26eea70cef99b97/hourly/q/"+points[i].lat()+","+points[i].lng()+".json");
+
+    // $.ajax({
+    //   url : "http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+points[i].lat()+","+points[i].lng()+".json",
+    //   dataType : "jsonp",
+    //   success : function(parsed_json) {
+    //     var weatherListItem = $("<li>");
+    //     var listItemTime = "Time: "+response.hourly_forecast[0].FCTTIME.pretty;
+    //     var lsitItemTemp_F = "Temp: "+ response.hourly_forecast[0].temp.english+" °F";
+    //     var listItemFeelsLikeTemp_F = response.hourly_forecast[0].feelslike
+    //     var listItemConditionsImg = "<img src='"+response.hourly_forecast[0].icon_url+"'>";
+    //     var listItemConditions = response.hourly_forecast[0].wx;
+    //     var listItemWind = "Wind: "+response.hourly_forecast[0].wspd.english+" mph";
+    //     var listItemHumidity = "Humidity: "+response.hourly_forecast[0].humidity+" %";
+    //     alert("Current temperature in " + location + " is: " + temp_f);
+    //   }
+    // });
+//   }
+// };
+
+
+
+
+
+
+
+
+
 
 function detailedWeather(){
-  for (var i = 0; i < points.length; i++) {
+  console.log("detailedWeather() called")
+  var detailPoints = polyline.GetPointsAtDistance(1609.34 * (document.getElementById('mileValue').value));
+  for (var i = 0; i < detailPoints.length; i++) {
  
-  var undergroundWeatherapiKey="b26eea70cef99b97";
-  var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+points[i].lat()+","+points[i].lng()+".json";
-  //console.log(undergroundWeatherURL);
-  $.ajax({
-    //makesure you change this when user inputs
-    url: undergroundWeatherURL,
-    method:"GET"
-  })
+    var undergroundWeatherapiKey="b26eea70cef99b97";
+    var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly/q/"+detailPoints[i].lat()+","+detailPoints[i].lng()+".json";
+    //console.log(undergroundWeatherURL);
+    var listItemCity
+    $.ajax({
+      //makesure you change this when user inputs
+      url: undergroundWeatherURL,
+      method:"GET"
+    })
     .done(function(response){
       var weatherListItem = $("<li>");
-      var listItemCity 
-      var listItemTime = "Time: "+response.hourly_forecast[0].FCTTIME.pretty;
-      var lsitItemTemp_F = "Temp: "+ response.hourly_forecast[0].temp.english+" °F";
-      var listItemFeelsLikeTemp_F = response.hourly_forecast[0].feelslike
-      var listItemConditionsImg = "<img src='"+response.hourly_forecast[0].icon_url+"'>";
-      var listItemConditions = response.hourly_forecast[0].wx;
-      var listItemWind = "Wind: "+response.hourly_forecast[0].wspd.english+" mph";
-      var listItemHumidity = "Humidity: "+response.hourly_forecast[0].humidity+" %";
+      var listItemTime = $("<div>").text("Time: "+response.hourly_forecast[0].FCTTIME.pretty);
+      var listItemTemp_F = $("<div>").text("Temp: "+ response.hourly_forecast[0].temp.english+" °F");
+      var listItemConditionsImg = $("<div>").html("<img src='"+response.hourly_forecast[0].icon_url+"'>");
+      var listItemConditions = $("<div>").text(response.hourly_forecast[0].wx);
+      var listItemWind = $("<div>").text("Wind: "+response.hourly_forecast[0].wspd.english+" mph");
+      var listItemHumidity = $("<div>").text("Humidity: "+response.hourly_forecast[0].humidity+" %");
+      weatherListItem.append(listItemTime);
+      weatherListItem.append(listItemConditionsImg);
+      weatherListItem.append(listItemTemp_F);
+      weatherListItem.append(listItemConditions);
+      weatherListItem.append(listItemWind);
+      weatherListItem.append(listItemHumidity);
+      $(".list-group-item").append(weatherListItem);
+      
+    });
+  };
+};
 
 
 //-------AUTOCOMPLETE
