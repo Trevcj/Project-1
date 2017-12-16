@@ -79,7 +79,6 @@ function initMap() {
   initAutocomplete("startLocation");
   initAutocomplete("endLocation");
 }
-
 //calculates the route
 function calcRoute() {
   var request = {
@@ -203,7 +202,6 @@ function initAutocomplete(location) {
   // location types.
   autocomplete = new google.maps.places.Autocomplete(
       /** @type {!HTMLInputElement} */(document.getElementById(location)),
-
       {types: ['geocode']});
 
   // When the user selects an address from the dropdown, populate the address
@@ -231,34 +229,4 @@ function geolocate() {
   }
 }
 
-
-<<<<<<< HEAD
-  // When the user selects an address from the dropdown, populate the address
-  // fields in the form.
-  autocomplete.addListener('place_changed', geolocateEnd);
-}
-
-
-
-// Bias the autocomplete object to the user's geographical location,
-// as supplied by the browser's 'navigator.geolocation' object.
-function geolocateEnd() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var geolocation = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      var circle = new google.maps.Circle({
-        center: geolocation,
-        radius: position.coords.accuracy
-      });
-      autocomplete.setBounds(circle.getBounds());
-    });
-  }
-}
-// $(".list-group-item").mouseover(function() {
-//   $(".list-group-item").addClass("active")
-// })
-=======
->>>>>>> 3e0c20d71175e6b96ecb79f29b1a5c31e9ccba83
+ 
