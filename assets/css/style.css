@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 li:hover {
 	background-color: rgb(36, 92, 247);
 	color: white;
@@ -106,59 +106,3 @@ footer {
 h3{
 	text-align:center;
 }
-
-=======
-.jumbotron {
-	background-image: url(../images/topography.png);
-	text-align: center;
-	color: #777;
-	border-bottom: solid 1px #ddd;
-}
-h5 {
-	font-style: italic;
-}
-
-.sidenav {
-	background-image: url(../images/topography.png);
-	border: solid 1px #ddd;
-	padding-bottom: 15px;
-	color: #777;
-}
-#center {
-	text-align: center;
-}
-
-#weatherbox {
-	border: solid 1px #ddd;
-
-}
-
-.card-header {
-	background-image: url(../images/topography.png);
-	padding: 5px;
-	border-bottom: solid 1px #ddd;
-	color: #777;
-}
-#detailedWeather {
-	padding: 10px;
-	color: #777;
-}
-#mapBody{
-	margin-bottom: 15px;
-	width:100%;
-	height:450px;
-}
-footer {
-	text-align: center;
-	background-image: url(../images/topography.png);
-	/*padding-top: 15px;*/
-	margin-top: 15px;
-	border-top:solid 1px #ddd;
-}
-<<<<<<< HEAD
-=======
-h3{
-	text-align:center;
-}
->>>>>>> 17beacac1ca3bc5d5b895a79cd06bac0a2702e40
->>>>>>> 3e0c20d71175e6b96ecb79f29b1a5c31e9ccba83
