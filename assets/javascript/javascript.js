@@ -21,14 +21,14 @@ var responseGlobal;
 function waypointDuration(toWaypointdurationString){
   var toWaypointdurationArray=toWaypointdurationString.split(" ");
   var arrayLength=toWaypointdurationArray.length;
-  var toWaypointdurationHr;
-  var toWaypointdurationMin;
+  var toWaypointdurationHr=0;
+  var toWaypointdurationMin=0;
   console.log(toWaypointdurationArray);
   switch (arrayLength){
     case 2:
       durationDays=0;
       toWaypointdurationMin=parseInt(toWaypointdurationArray[0]);
-      if(toWaypointdurationMin>30){
+      if(toWaypointdurationMin>=30){
         toWaypointdurationHr=1;
         toWaypointdurationMin=0;
         console.log("case2")
@@ -71,7 +71,7 @@ function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
     
   }
   else{
-    console.log("im here because min<30 and hrs<24")
+    
     if (toWaypointdurationMin>=30){
       toWaypointdurationHr=toWaypointdurationHr+1;
       console.log("minutes more than 30");
@@ -79,14 +79,15 @@ function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
     waypointPasstime=currentTime+toWaypointdurationHr;
     console.log("currentTimeadded"+currentTime);
     console.log("toWaypointdurationHradded"+toWaypointdurationHr);
-    console.log("after adding current time"+waypointPasstime);
+    console.log("waypointPasstimeafter adding"+waypointPasstime);
     if (waypointPasstime>=24){
 
-        waypointPasstime=(toWaypointdurationHr-24);
-        console.log("after subntract 24"+waypointPasstime);
+        waypointPasstime=(waypointPasstime-24);
+        console.log("after subntract 24 from waypointpasstime"+waypointPasstime);
         //CHECK FOR WHEN THE HRS GO AVOVE
         durationDays++;
         console.log("hr is more than 24");
+        console.log(durationDays);
     }
     
     
@@ -99,18 +100,9 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
   var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
   console.log(directionsURL);
-  $.ajax({
+  return $.ajax({
     url: directionsURL,
     method:"GET"
-  })
-  .done(function(response){
-
-    var waypointAddress=response.routes[0].legs[0].end_address;
-    var toWaypointdurationString=response.routes[0].legs[0].duration.text;
-    //determine if waypoint is mins/hrs/days
-    waypointDuration(toWaypointdurationString);
-    string=string+"</br>"+"<strong>"+waypointAddress+"</strong>";
-   
   });
 }
 
@@ -120,6 +112,7 @@ function undergroundWeatherAPI(latitude,longitude,marker){
   var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+latitude+","+longitude+".json";
   console.log(undergroundWeatherURL);
   $.ajax({
+
     //makesure you change this when user inputs
     url: undergroundWeatherURL,
     method:"GET"
@@ -130,7 +123,6 @@ function undergroundWeatherAPI(latitude,longitude,marker){
     var temp;
     var condition;
     var icon;
-    var dayIndex;
     var responseHrinterger;
     var yday;
     var day;
@@ -157,54 +149,18 @@ function undergroundWeatherAPI(latitude,longitude,marker){
       else{
         yday=currentDayoftheYear+durationDays;
         console.log("yday"+yday);
+        //SECOND ATTEMPT IDEA
         for(var i=0;i<response.hourly_forecast.length;i++){
-          day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
-          if(day===yday){
-            console.log("i"+i);
-            var pushObject={
-              hour:response.hourly_forecast[i].FCTTIME.hour,
-              weekday_name:response.hourly_forecast[i].FCTTIME.weekday_name,
-              weekDay:response.hourly_forecast[i].FCTTIME.civil,
-              temp:response.hourly_forecast[i].temp.english,
-              wx:response.hourly_forecast[i].wx,
-              icon_url:response.hourly_forecast[i].icon_url,
-            }
-            dayWeatherArray.push(pushObject);
-          }
-        }
-        for(var i=0;i<dayWeatherArray.length;i++){
-          responseHrinterger=parseInt(dayWeatherArray[i].hour);
-          if(responseHrinterger===waypointPasstime){
-            time=dayWeatherArray[i].weekday_name;
-            weekDay=dayWeatherArray[i].weekDay;
-            temp="Temp: "+ dayWeatherArray[i].temp+" °F";
-            condition=dayWeatherArray[i].wx;
-            icon="<img src='"+dayWeatherArray[i].icon_url+"'>";
-            break;
-          }
-        }
-        /*//SECOND ATTEMPT IDEA
-          for(var i=0;i<response.hourly_forecast.length;i++){
           day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
           responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
           if(responseHrinterger===waypointPasstime&&day===yday){
-            dayIndex=i;
+            time=response.hourly_forecast[i].FCTTIME.weekday_name;
+            weekDay=response.hourly_forecast[i].FCTTIME.civil;
+            temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
+            condition=response.hourly_forecast[i].wx;
+            icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
           }
         }
-        //FIRST ATTEMP IDEA 
-        /*for(var i=0;i<response.hourly_forecast.length;i++){
-          day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
-          if(day===yday){
-            dayWeatherArray.push(response.hourly_forecast[i].FCTTIME);
-          }
-        }
-        for(var i=0;i<dayWeatherArray.length;i++){
-          responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
-          if(responseHrinterger===waypointPasstime){
-            dayIndex=i;
-            break;
-          }
-        }*/
       }
 
       string=string+"</br>"+weekDay+" "+time+"</br>"+condition+"</br>"+icon+temp;
@@ -298,10 +254,19 @@ function calcRoute() {
           var makerPositionLng=array[1];
        
           //we want the tripduration and thewaypoint name
-          directionsAPI(originLat,originLng,makerPositionLat,makerPositionLng);
-          
-          //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
-          undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker);
+          directionsAPI(originLat,originLng,makerPositionLat,makerPositionLng)
+          .done(function(response){
+            
+                var waypointAddress=response.routes[0].legs[0].end_address;
+                var toWaypointdurationString=response.routes[0].legs[0].duration.text;
+                //determine if waypoint is mins/hrs/days
+                waypointDuration(toWaypointdurationString);
+                string=string+"</br>"+"<strong>"+waypointAddress+"</strong>";
+
+                //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
+              undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker);
+               
+              });
           
           //resetting the variables used
           string="";
@@ -309,9 +274,6 @@ function calcRoute() {
         });
         markers.push(marker);
       }
-
-      /*durationTrip=response.routes[0].legs[0].duration.text;
-      distanceTrip=response.routes[0].legs[0].distance.text;*/
     }
   }); 
 }
@@ -350,12 +312,6 @@ $("#runSearch").on("click",function(){
 
   var origin=$("#startLocation").val().trim();
   var destination=$("#startLocation").val().trim();
-  /*var now = new Date();
-var start = new Date(now.getFullYear(), 0, 0);
-var diff = now - start;
-var oneDay = 1000 * 60 * 60 * 24;
-var day = Math.floor(diff / oneDay);
-console.log('Day of year: ' + day);*/ 
 
   if(origin&& destination!==" "){
 
@@ -378,8 +334,7 @@ console.log('Day of year: ' + day);*/
     else{
       currenTime=currentTime;
     }
-    //console.log(currentTime);
-    //console.log(currentMin);
+
     calcRoute();
   }
 
