@@ -62,26 +62,36 @@ function waypointDuration(toWaypointdurationString){
   calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr);
 }
 function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
+  console.log("comming in waypointpasstime"+waypointPasstime);
   waypointPasstime=0;
-  console.log("current"+currentTime);
-  if(durationDays===0){
+  console.log("after setting to zero"+waypointPasstime);
+  if(durationDays>0){
+    waypointPasstime=toWaypointdurationHr;
+    console.log("takes days to get here");
     
-    if (toWaypointdurationMin>30){
-      toWaypointdurationHr=toWaypointdurationHr+1;
-    }
-    if (waypointPasstime>24){
-      waypointPasstime=(waypointPasstime-24)-1;
-      //CHECK FOR WHEN THE HRS GO AVOVE
-      durationDays++;
-    }
-    waypointPasstime=currentTime+toWaypointdurationHr;
-    console.log("currentTime"+currentTime);
-    console.log("toWaypointdurationHr"+toWaypointdurationHr);
   }
   else{
-    waypointPasstime=toWaypointdurationHr;
+    console.log("im here because min<30 and hrs<24")
+    if (toWaypointdurationMin>=30){
+      toWaypointdurationHr=toWaypointdurationHr+1;
+      console.log("minutes more than 30");
+    }
+    waypointPasstime=currentTime+toWaypointdurationHr;
+    console.log("currentTimeadded"+currentTime);
+    console.log("toWaypointdurationHradded"+toWaypointdurationHr);
+    console.log("after adding current time"+waypointPasstime);
+    if (waypointPasstime>=24){
+
+        waypointPasstime=(toWaypointdurationHr-24);
+        console.log("after subntract 24"+waypointPasstime);
+        //CHECK FOR WHEN THE HRS GO AVOVE
+        durationDays++;
+        console.log("hr is more than 24");
+    }
+    
+    
   } 
-  console.log(waypointPasstime);
+  console.log("when leaving the function to api"+waypointPasstime);
 }
 //----------------DIRECTIONS API---------------------
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
@@ -127,7 +137,6 @@ function undergroundWeatherAPI(latitude,longitude,marker){
     var dayWeatherArray=[];
     console.log("WeatdurationDays"+durationDays);
     console.log("waypointsPasstime"+waypointPasstime);
-    console.log(dayWeatherArray);
     if(response.hourly_forecast[0]===" "){
       string="NO WHEATHER AVAIL FOR THIS LOCATION";
     }
@@ -136,22 +145,53 @@ function undergroundWeatherAPI(latitude,longitude,marker){
         for(var i=0;i<response.hourly_forecast.length;i++){
           responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
           if(responseHrinterger===waypointPasstime){
-            dayIndex=i;
+            time=response.hourly_forecast[i].FCTTIME.weekday_name;
+            weekDay=response.hourly_forecast[i].FCTTIME.civil;
+            temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
+            condition=response.hourly_forecast[i].wx;
+            icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
             break;
           }
         }
       }
       else{
-        console.log("gots days");
         yday=currentDayoftheYear+durationDays;
+        console.log("yday"+yday);
         for(var i=0;i<response.hourly_forecast.length;i++){
+          day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
+          if(day===yday){
+            console.log("i"+i);
+            var pushObject={
+              hour:response.hourly_forecast[i].FCTTIME.hour,
+              weekday_name:response.hourly_forecast[i].FCTTIME.weekday_name,
+              weekDay:response.hourly_forecast[i].FCTTIME.civil,
+              temp:response.hourly_forecast[i].temp.english,
+              wx:response.hourly_forecast[i].wx,
+              icon_url:response.hourly_forecast[i].icon_url,
+            }
+            dayWeatherArray.push(pushObject);
+          }
+        }
+        for(var i=0;i<dayWeatherArray.length;i++){
+          responseHrinterger=parseInt(dayWeatherArray[i].hour);
+          if(responseHrinterger===waypointPasstime){
+            time=dayWeatherArray[i].weekday_name;
+            weekDay=dayWeatherArray[i].weekDay;
+            temp="Temp: "+ dayWeatherArray[i].temp+" °F";
+            condition=dayWeatherArray[i].wx;
+            icon="<img src='"+dayWeatherArray[i].icon_url+"'>";
+            break;
+          }
+        }
+        /*//SECOND ATTEMPT IDEA
+          for(var i=0;i<response.hourly_forecast.length;i++){
           day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
           responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
           if(responseHrinterger===waypointPasstime&&day===yday){
             dayIndex=i;
           }
         }
-        
+        //FIRST ATTEMP IDEA 
         /*for(var i=0;i<response.hourly_forecast.length;i++){
           day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
           if(day===yday){
@@ -166,14 +206,6 @@ function undergroundWeatherAPI(latitude,longitude,marker){
           }
         }*/
       }
-        console.log("dayIndex"+dayIndex);
-       
-        time=response.hourly_forecast[dayIndex].FCTTIME.weekday_name;
-        weekDay=response.hourly_forecast[dayIndex].FCTTIME.civil;
-        temp="Temp: "+ response.hourly_forecast[dayIndex].temp.english+" °F";
-        condition=response.hourly_forecast[dayIndex].wx;
-        icon="<img src='"+response.hourly_forecast[dayIndex].icon_url+"'>";
-      
 
       string=string+"</br>"+weekDay+" "+time+"</br>"+condition+"</br>"+icon+temp;
 
