@@ -196,7 +196,7 @@ function detailedWeather(){
       method:"GET"
     })
     .done(function(response){
-      var weatherListItem = $("<li>");
+      var weatherListItem = $("<li class='list-group-item'>");
       var listItemTime = $("<div>").text("Time: "+response.hourly_forecast[0].FCTTIME.pretty);
       var listItemTemp_F = $("<div>").text("Temp: "+ response.hourly_forecast[0].temp.english+" °F");
       var listItemConditionsImg = $("<div>").html("<img src='"+response.hourly_forecast[0].icon_url+"'>");
@@ -209,7 +209,7 @@ function detailedWeather(){
       weatherListItem.append(listItemConditions);
       weatherListItem.append(listItemWind);
       weatherListItem.append(listItemHumidity);
-      $(".list-group-item").append(weatherListItem);
+      $(".list-group").prepend(weatherListItem);
       
     });
   };
