@@ -39,7 +39,7 @@ function undergroundWeatherAPI(latitude,longitude,marker){
   .done(function(response){
     var string;
     if(response.hourly_forecast[0]===" "){
-      string="NO WHEATHER AVAIL FOR THIS LOCATION";
+      string="NO WEATHER AVAIL FOR THIS LOCATION";
     }
     else{
       var currentTime="Time: "+response.hourly_forecast[0].FCTTIME.pretty;
@@ -180,7 +180,7 @@ $("#runSearch").on("click",function(){
   var origin=$("#startLocation").val().trim();
   var destination=$("#startLocation").val().trim();
   
-  if(startLocation&& endLocation !==" "){
+  if(startLocation && endLocation !==" "){
     calcRoute();
 
   }
@@ -271,3 +271,6 @@ function geolocateEnd() {
     });
   }
 }
+// $(".list-group-item").mouseover(function() {
+//   $(".list-group-item").addClass("active")
+// })

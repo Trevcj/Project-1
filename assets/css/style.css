@@ -1,4 +1,7 @@
-<<<<<<< HEAD
+li:hover {
+	background-color: rgb(36, 92, 247);
+	color: white;
+}
 .jumbotron {
 	background-image: url(../images/topography.png);
 	text-align: center;
@@ -52,7 +55,6 @@ footer {
 	margin-top: 15px;
 	border-top:solid 1px #ddd;
 }
-=======
 .jumbotron {
 	background-image: url(../images/topography.png);
 	text-align: center;
@@ -103,4 +105,4 @@ footer {
 h3{
 	text-align:center;
 }
->>>>>>> 17beacac1ca3bc5d5b895a79cd06bac0a2702e40
+
