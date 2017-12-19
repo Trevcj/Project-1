@@ -107,7 +107,7 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
 }
 
 //------------------WEATHER API-----------------------------------
-function undergroundWeatherAPI(latitude,longitude,marker){
+function undergroundWeatherAPI(latitude,longitude,marker,startMark){
   var undergroundWeatherapiKey="b26eea70cef99b97";
   var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+latitude+","+longitude+".json";
   console.log(undergroundWeatherURL);
@@ -133,36 +133,45 @@ function undergroundWeatherAPI(latitude,longitude,marker){
       string="NO WHEATHER AVAIL FOR THIS LOCATION";
     }
     else{
-      if(durationDays===0){
-        for(var i=0;i<response.hourly_forecast.length;i++){
-          responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
-          if(responseHrinterger===waypointPasstime){
-            time=response.hourly_forecast[i].FCTTIME.weekday_name;
-            weekDay=response.hourly_forecast[i].FCTTIME.civil;
-            temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
-            condition=response.hourly_forecast[i].wx;
-            icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
-            break;
-          }
-        }
+      if(startMark==="true"){
+        time=response.hourly_forecast[0].FCTTIME.weekday_name;
+        weekDay=response.hourly_forecast[0].FCTTIME.civil;
+        temp="Temp: "+ response.hourly_forecast[0].temp.english+" °F";
+        condition=response.hourly_forecast[0].wx;
+        icon="<img src='"+response.hourly_forecast[0].icon_url+"'>";
+
       }
       else{
-        yday=currentDayoftheYear+durationDays;
-        console.log("yday"+yday);
-        //SECOND ATTEMPT IDEA
-        for(var i=0;i<response.hourly_forecast.length;i++){
-          day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
-          responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
-          if(responseHrinterger===waypointPasstime&&day===yday){
-            time=response.hourly_forecast[i].FCTTIME.weekday_name;
-            weekDay=response.hourly_forecast[i].FCTTIME.civil;
-            temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
-            condition=response.hourly_forecast[i].wx;
-            icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
+        if(durationDays===0){
+          for(var i=0;i<response.hourly_forecast.length;i++){
+            responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
+            if(responseHrinterger===waypointPasstime){
+              time=response.hourly_forecast[i].FCTTIME.weekday_name;
+              weekDay=response.hourly_forecast[i].FCTTIME.civil;
+              temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
+              condition=response.hourly_forecast[i].wx;
+              icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
+              break;
+            }
+          }
+        }
+        else{
+          yday=currentDayoftheYear+durationDays;
+          console.log("yday"+yday);
+          //SECOND ATTEMPT IDEA
+          for(var i=0;i<response.hourly_forecast.length;i++){
+            day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
+            responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
+            if(responseHrinterger===waypointPasstime&&day===yday){
+              time=response.hourly_forecast[i].FCTTIME.weekday_name;
+              weekDay=response.hourly_forecast[i].FCTTIME.civil;
+              temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
+              condition=response.hourly_forecast[i].wx;
+              icon="<img src='"+response.hourly_forecast[i].icon_url+"'>";
+            }
           }
         }
       }
-
       string=string+"</br>"+weekDay+" "+time+"</br>"+condition+"</br>"+icon+temp;
 
       //OPENING WINDOW ABOVE MARKER WHEN CLICKED
@@ -211,7 +220,7 @@ function calcRoute() {
       originLat=originObject.lat();
       originLng=originObject.lng();
       destinationObject=response.routes[0].legs[0].end_location;
-      //directionsDisplay.setDirections(response);
+      
       polyline.setPath([]);
       var bounds=new google.maps.LatLngBounds();
       //array of onjects with the steps for everywaypoint
@@ -226,7 +235,8 @@ function calcRoute() {
         }
       }
       polyline.setMap(map);
-      directionsDisplay.setDirections(response);
+      //REMOVED THE POLYLINE CREATED BY GOOGLE DIRECTIONS
+      //directionsDisplay.setDirections(response);
       //erasing markers from previous mapping
       for(var i=0;i<markers.length;i++){
         markers[i].setMap(null);
@@ -242,16 +252,27 @@ function calcRoute() {
           position:points[i],
           title:"Location" +(i+1)
         });
-
         //this is where we will display the weather Conditions
         marker.addListener('click', function(){
-          
+          var startMarker="false";
           var clickedMarker=this;
           var markerPositionObj=this.getPosition();
           var markerPosition=this.getPosition().toUrlValue(6);
           var array=markerPosition.split(",");
           var makerPositionLat=array[0];
           var makerPositionLng=array[1];
+          //resetting the variables used
+          string="";
+          //THE FIRST MARKER NEED TO CALL DOESNT NEED DIRECTIONSAPI CALL 
+          if(i==0){
+            if(i===0){
+              var startMarker="true";
+              var originAddress=response.routes[0].legs[0].end_address;
+              string=string+"</br>"+"<strong>"+originAddress+"</strong>";
+              undergroundWeatherAPI(originLat,originLng,clickedMarker,startMarker);
+            }
+   
+          }
        
           //we want the tripduration and thewaypoint name
           directionsAPI(originLat,originLng,makerPositionLat,makerPositionLng)
@@ -269,7 +290,7 @@ function calcRoute() {
               });
           
           //resetting the variables used
-          string="";
+          //string="";
           
         });
         markers.push(marker);
@@ -382,4 +403,4 @@ function geolocate() {
       autocomplete.setBounds(circle.getBounds());
     });
   }
-}
+
