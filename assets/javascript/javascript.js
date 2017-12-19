@@ -403,4 +403,4 @@ function geolocate() {
       autocomplete.setBounds(circle.getBounds());
     });
   }
-
+};
