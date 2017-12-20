@@ -412,7 +412,7 @@ function detailedWeather(){
 
       //Modifications made to the WEATHER API to elivate the need for a marker parameter and output data to div instead of info window
       var undergroundWeatherapiKey="b26eea70cef99b97";
-      var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+waypointLocationLat+","+waypointLocationLng+".json";
+      var undergroundWeatherURL="https://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+waypointLocationLat+","+waypointLocationLng+".json";
 //            console.log(undergroundWeatherURL);
 
       
