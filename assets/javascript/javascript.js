@@ -108,6 +108,7 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
     method:"GET"
   });
 }
+// "https://cors-anywhere.herokuapp.com/" +
 
 //------------------WEATHER API-----------------------------------
 
@@ -136,7 +137,7 @@ function undergroundWeatherAPI(latitude,longitude,marker,passTime){
     // console.log("WeatdurationDays"+durationDays);
     // console.log("waypointsPasstime"+waypointPasstime);
     if(response.hourly_forecast[0]===" "){
-      string="NO WHEATHER AVAIL FOR THIS LOCATION";
+      string="NO WEATHER AVAIL FOR THIS LOCATION";
     }
     else{
 
@@ -202,7 +203,6 @@ function initMap() {
   initAutocomplete("startLocation");
   initAutocomplete("endLocation");
 }
-
 //calculates the route
 function calcRoute() {
   var request = {
@@ -235,7 +235,7 @@ function calcRoute() {
       }
       polyline.setMap(map);
       //REMOVED THE POLYLINE CREATED BY GOOGLE DIRECTIONS
-      //directionsDisplay.setDirections(response);
+      directionsDisplay.setDirections(response);
       //erasing markers from previous mapping
       for(var i=0;i<markers.length;i++){
         markers[i].setMap(null);
@@ -246,8 +246,18 @@ function calcRoute() {
       var points=getPointsAtDistance((mileValue*1609.34),originObject,destinationObject);
       for(var i=0;i<points.length;i++){
         //two marker declarations
+        if (i===0) {
+          var startMarker = new google.maps.Marker({
+            map:map,
+            animation: google.maps.Animation.DROP,
+            icon: "https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png",
+            position: points[0],
+            title: "Starting Location"
+          });
+        }
         var marker = new google.maps.Marker({
           map:map,
+          animation: google.maps.Animation.DROP,
           position:points[i],
           title:"Location" +(i+1)
         });
@@ -295,8 +305,9 @@ function calcRoute() {
         markers.push(marker);
       } detailedWeather();
     }
-  }); 
+  });   
 }
+
 //had to turn this to a function from eopoly.js because it was not being read
 function getPointsAtDistance(meters,origin,destination){
   var next = meters;
@@ -379,7 +390,7 @@ function detailedWeather(){
 
     let detailPointLat= detailPoints[i].lat();
     let detailPointLng= detailPoints[i].lng();
-    let weatherListItem = $("<li class='list-group-item'>");
+    let weatherListItem = $("<li class='list-group-item' id='item'>");
 
     $(".list-group").append(weatherListItem);
 
@@ -497,7 +508,6 @@ function initAutocomplete(location) {
   // location types.
   autocomplete = new google.maps.places.Autocomplete(
       /** @type {!HTMLInputElement} */(document.getElementById(location)),
-
       {types: ['geocode']});
 
   // When the user selects an address from the dropdown, populate the address

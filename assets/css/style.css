@@ -1,3 +1,8 @@
+
+li:hover {
+	background-color: rgb(36, 92, 247);
+	color: white;
+}
 .jumbotron {
 	background-image: url(../images/topography.png);
 	text-align: center;
@@ -8,6 +13,10 @@ h5 {
 	font-style: italic;
 }
 
+#item {
+	-webkit-transition: background-color 2s, color 2s;
+	transition: background-color 2s, color 2s;
+}
 .sidenav {
 	background-image: url(../images/topography.png);
 	border: solid 1px #ddd;
@@ -20,6 +29,10 @@ h5 {
 
 #weatherbox {
 	border: solid 1px #ddd;
+	background-image: url(../images/topography.png);
+	width: 80%;
+	margin: auto;
+	padding: 10px;
 
 }
 
@@ -32,6 +45,8 @@ h5 {
 #detailedWeather {
 	padding: 10px;
 	color: #777;
+	width: 80%;
+	margin: auto;
 }
 #mapBody{
 	margin-bottom: 15px;
@@ -41,9 +56,7 @@ h5 {
 footer {
 	text-align: center;
 	background-image: url(../images/topography.png);
-	/*padding-top: 15px;*/
+	padding-top: 15px;
 	margin-top: 15px;
 	border-top:solid 1px #ddd;
 }
-
-
