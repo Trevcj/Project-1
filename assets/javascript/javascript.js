@@ -116,7 +116,7 @@ function undergroundWeatherAPI(latitude,longitude,marker,passTime){
 
 
   var undergroundWeatherapiKey="b26eea70cef99b97";
-  var undergroundWeatherURL="http://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+latitude+","+longitude+".json";
+  var undergroundWeatherURL="https://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+latitude+","+longitude+".json";
   console.log(undergroundWeatherURL);
   $.ajax({
 
