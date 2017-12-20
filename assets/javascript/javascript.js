@@ -565,5 +565,8 @@ function geolocate() {
       autocomplete.setBounds(circle.getBounds());
     });
   }
+<<<<<<< HEAD
 };
+=======
+>>>>>>> 0cbb507df456aaecd05ccd0b37a24592d8ba63f8
 
