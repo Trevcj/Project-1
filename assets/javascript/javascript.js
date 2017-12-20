@@ -98,13 +98,14 @@ function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr){
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
-  var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
+  var directionsURL="https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
   console.log(directionsURL);
   return $.ajax({
     url: directionsURL,
     method:"GET"
   });
 }
+// "https://cors-anywhere.herokuapp.com/" +
 
 //------------------WEATHER API-----------------------------------
 function undergroundWeatherAPI(latitude,longitude,marker){
@@ -239,6 +240,7 @@ function calcRoute() {
         //two marker declarations
         var marker = new google.maps.Marker({
           map:map,
+          animation: google.maps.Animation.DROP,
           position:points[i],
           title:"Location" +(i+1)
         });
@@ -275,8 +277,9 @@ function calcRoute() {
         markers.push(marker);
       }
     }
-  }); 
+  });   
 }
+
 //had to turn this to a function from eopoly.js because it was not being read
 function getPointsAtDistance(meters,origin,destination){
   var next = meters;
