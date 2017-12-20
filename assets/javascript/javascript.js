@@ -252,20 +252,23 @@ function calcRoute() {
       for(var i=0;i<points.length;i++){
         //two marker declarations
         if (i===0) {
-          var startMarker = new google.maps.Marker({
+          var marker = new google.maps.Marker({
             map:map,
             animation: google.maps.Animation.DROP,
-            icon: "https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png",
+            icon: "http://maps.google.com/mapfiles/arrowshadow.png",
             position: points[0],
             title: "Starting Location"
+
           });
         }
+        else{
         var marker = new google.maps.Marker({
           map:map,
           animation: google.maps.Animation.DROP,
           position:points[i],
           title:"Location" +(i+1)
         });
+      }
         //this is where we will display the weather Conditions
         marker.addListener('click', function(){
             var currentTime;
@@ -319,8 +322,8 @@ function calcRoute() {
           
         });
         markers.push(marker);
-      } //detailedWeather();
-    }
+      } 
+      }//detailedWeather();
   });   
 }
 
@@ -565,8 +568,5 @@ function geolocate() {
       autocomplete.setBounds(circle.getBounds());
     });
   }
-<<<<<<< HEAD
 };
-=======
->>>>>>> 0cbb507df456aaecd05ccd0b37a24592d8ba63f8
 
