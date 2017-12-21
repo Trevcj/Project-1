@@ -1,70 +1,8 @@
-<<<<<<< HEAD
-.jumbotron {
-	background-image: url(../images/topography.png);
-	text-align: center;
-	color: #777;
-	border-left: 1px #ddd solid;
-	border-right: 1px #ddd solid;
-	border-bottom: 1px #ddd solid;
-	width: 84.5%;
-	margin: auto;
-	margin-bottom: 15px;
-}
-.sidenav {
-	background-image: url(../images/topography.png);
-	border: solid 1px #ddd;
-	padding-bottom: 15px;
-	color: #777;
-}
 
-.list-group-item {
-	text-align: center;
-	text-align: center;
-    width: 90%;
-    margin: auto;
-    margin-bottom: 20px;
+li:hover {
+	background-color: rgb(36, 92, 247);
+	color: white;
 }
-
-#center {
-	text-align: center;
-}
-
-#weatherbox {
-	border: solid 1px #ddd;
-	background-image: url(../images/topography.png);
-
-}
-
-.card-header {
-	background-image: url(../images/topography.png);
-	padding: 5px;
-	border-bottom: solid 1px #ddd;
-	color: #777;
-}
-#detailedWeather {
-	padding: 10px;
-	color: #777;
-}
-#mapBody{
-	margin-bottom: 15px;
-	height: 450px;
-}
-footer {
-	text-align: center;
-	background-image: url(../images/topography.png);
-	padding-top: 15px;
-	margin-top: 15px;
-	border-top:solid 1px #ddd;
-}
-h3 {
-	text-align: center;
-}
-
-
-li:hover { 
-    background-color: red;
-}
-=======
 .jumbotron {
 	background-image: url(../images/topography.png);
 	text-align: center;
@@ -75,6 +13,10 @@ h5 {
 	font-style: italic;
 }
 
+#item {
+	-webkit-transition: background-color 2s, color 2s;
+	transition: background-color 2s, color 2s;
+}
 .sidenav {
 	background-image: url(../images/topography.png);
 	border: solid 1px #ddd;
@@ -87,6 +29,10 @@ h5 {
 
 #weatherbox {
 	border: solid 1px #ddd;
+	background-image: url(../images/topography.png);
+	width: 80%;
+	margin: auto;
+	padding: 10px;
 
 }
 
@@ -99,6 +45,8 @@ h5 {
 #detailedWeather {
 	padding: 10px;
 	color: #777;
+	width: 80%;
+	margin: auto;
 }
 #mapBody{
 	margin-bottom: 15px;
@@ -108,14 +56,7 @@ h5 {
 footer {
 	text-align: center;
 	background-image: url(../images/topography.png);
-	/*padding-top: 15px;*/
+	padding-top: 15px;
 	margin-top: 15px;
 	border-top:solid 1px #ddd;
 }
-<<<<<<< HEAD
-=======
-h3{
-	text-align:center;
-}
->>>>>>> 17beacac1ca3bc5d5b895a79cd06bac0a2702e40
->>>>>>> 7a1b0a4c3fe0f62f552411dee4ffee76d73c315f
