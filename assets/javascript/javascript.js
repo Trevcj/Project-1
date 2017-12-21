@@ -109,7 +109,7 @@ function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr,currentTime
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
-  var directionsURL="https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
+  var directionsURL="https://cors-anywhere.herokuapp.com/" +"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
 //  console.log(directionsURL);
   return $.ajax({
     url: directionsURL,
@@ -263,7 +263,7 @@ function calcRoute() {
           var marker = new google.maps.Marker({
             map:map,
             animation: google.maps.Animation.DROP,
-            icon: "http://maps.google.com/mapfiles/arrowshadow.png",
+            icon: "https://maps.google.com/mapfiles/arrowshadow.png",
             position: points[0],
             title: "Starting Location"
 
