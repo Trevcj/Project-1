@@ -10,7 +10,6 @@ var markers=[];
 var originObject;
 var destinationObject;
 var waypointObject;
-
 var string="";
 //var durationDays=0;
 var originLat;
@@ -22,7 +21,7 @@ function waypointDuration(toWaypointdurationString,currentTime){
   var arrayLength=toWaypointdurationArray.length;
   var toWaypointdurationHr=0;
   var toWaypointdurationMin=0;
-
+//console.log(toWaypointdurationArray);
   switch (arrayLength){
     case 2:
       durationDays=0;
@@ -55,7 +54,6 @@ function waypointDuration(toWaypointdurationString,currentTime){
        }
     break;
   }
-
   //console.log("Hours:" + toWaypointdurationHr);
   //console.log("Minutes: " + toWaypointdurationMin);
   //console.log("Days: " + durationDays);
@@ -68,21 +66,16 @@ function waypointDuration(toWaypointdurationString,currentTime){
 function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr,currentTime,durationDays){
 
 //console.log("currentTime coming in second function "+currentTime);
-
   var localPassTime=0;
 //  console.log("after setting to zero"+waypointPasstime);
   if(durationDays>0){
     localPassTime=toWaypointdurationHr;
-
    // console.log("takes days to get here");
-
-
     
   }
   else{
     if (toWaypointdurationMin>=30){
       toWaypointdurationHr=toWaypointdurationHr+1;
-
     }
     }
     
@@ -91,21 +84,17 @@ function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr,currentTime
     //console.log("currentTimeadded"+currentTime);
     //console.log("resulting of addition "+ localPassTime);
     //console.log("durationDays"+durationDays);
-
-
 //    console.log("toWaypointdurationHradded"+toWaypointdurationHr);
 //    console.log("waypointPasstimeafter adding"+waypointPasstime);
     if (localPassTime>=24){
 
         localPassTime=(localPassTime-24);
-
         //CHECK FOR WHEN THE HRS GO AVOVE
         durationDays++;
  //       console.log("hr is more than 24");
  //       console.log(durationDays);
     }
     
-
      
   //console.log("sending to underweatherEND" +localPassTime);
   //console.log("durationDaysEND"+durationDays);
@@ -114,15 +103,13 @@ function calcWaypointTime(toWaypointdurationMin,toWaypointdurationHr,currentTime
   passtimedurationDays.push(durationDays);
   //return localPassTime;
   return passtimedurationDays;
-
-
 //  console.log("when leaving the function to api"+waypointPasstime);
 }
 //----------------DIRECTIONS API---------------------
 function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
   var directionsKEY="AIzaSyAfNedlP-Xv-cl6ni8nbDMZD_red3X08WI";
   //trevor's backup AIzaSyAIq7MXbfsfyh18by7GqjrtP7xKeFmR-e8
-  var directionsURL="https://cors-anywhere.herokuapp.com/"+"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
+  var directionsURL="https://cors-anywhere.herokuapp.com/" +"https://maps.googleapis.com/maps/api/directions/json?origin="+originLat+","+originLng+"&destination="+markerPositionLat+","+markerPositionLng+"&key="+directionsKEY;
 //  console.log(directionsURL);
   return $.ajax({
     url: directionsURL,
@@ -133,16 +120,12 @@ function directionsAPI(originLat,originLng,markerPositionLat,markerPositionLng){
 
 //------------------WEATHER API-----------------------------------
 
-
 function undergroundWeatherAPI(latitude,longitude,marker,passTime,durationDays,currentDayoftheYear){
-
 
 
   var undergroundWeatherapiKey="b26eea70cef99b97";
   var undergroundWeatherURL="https://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+latitude+","+longitude+".json";
-
   //console.log(undergroundWeatherURL);
-
   $.ajax({
 
     //makesure you change this when user inputs
@@ -180,7 +163,6 @@ function undergroundWeatherAPI(latitude,longitude,marker,passTime,durationDays,c
         }
       }
       else{
-
           //console.log("currentDayoftheYearb4addition "+ currentDayoftheYear);
           //console.log("durationDaysb4addition "+durationDays);
          // console.log("currentDaypass b4 addition "+currentDaypass);
@@ -188,14 +170,11 @@ function undergroundWeatherAPI(latitude,longitude,marker,passTime,durationDays,c
         //console.log("currentDayoftheYearafteraddition "+ currentDayoftheYear);
         //console.log("durationDaysafteraddition "+durationDays);
         //console.log("currentDaypass after addition "+currentDaypass);
-
         //SECOND ATTEMPT IDEA
         for(var i=0;i<response.hourly_forecast.length;i++){
           day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
           responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
-
           if(responseHrinterger===passTime&&day===currentDaypass){
-
             time=response.hourly_forecast[i].FCTTIME.weekday_name;
             weekDay=response.hourly_forecast[i].FCTTIME.civil;
             temp="Temp: "+ response.hourly_forecast[i].temp.english+" °F";
@@ -281,7 +260,6 @@ function calcRoute() {
       for(var i=0;i<points.length;i++){
         //two marker declarations
         if (i===0) {
-
           var marker = new google.maps.Marker({
             map:map,
             animation: google.maps.Animation.DROP,
@@ -292,7 +270,6 @@ function calcRoute() {
           });
         }
         else{
-
         var marker = new google.maps.Marker({
           map:map,
           animation: google.maps.Animation.DROP,
@@ -337,21 +314,17 @@ function calcRoute() {
                 var waypointAddress=response.routes[0].legs[0].end_address;
                 var toWaypointdurationString=response.routes[0].legs[0].duration.text;
                 //determine if waypoint is mins/hrs/days
-
                 //array of passtime and durationDays
                 var passTime = waypointDuration(toWaypointdurationString,currentTime);
                 var passTimefromArray=passTime[0];
                 var durationDaysfromArray=passTime[1];
                
-
                 string=string+"</br>"+"<strong>"+waypointAddress+"</strong>";
 
                 //console.log("currentDayoftheYear before leavingtounderweatherfnction "+currentDayoftheYear);
                 //CALLING THE WEATHER API AND PASSING LAT,LONG,AND MARKER
-
               undergroundWeatherAPI(makerPositionLat,makerPositionLng,clickedMarker,passTimefromArray,durationDaysfromArray,currentDayoftheYear);
           
-
               });
         });
           
@@ -360,10 +333,8 @@ function calcRoute() {
           
         });
         markers.push(marker);
-
       } 
       }detailedWeather();
-
   });   
 }
 
@@ -402,9 +373,7 @@ $("#runSearch").on("click",function(){
 
   var origin=$("#startLocation").val().trim();
   var destination=$("#startLocation").val().trim();
-
   mileValue=$("#mileValue option:selected").val()
-
   //clear detailed weather div when you start a new search
   $(".list-group").empty();
 
@@ -582,123 +551,6 @@ function detailedWeather(){
   }
 }
 
-//detailed weather div version 2
-//this is where we will display the weather Conditions in the bottom div
-function detailedWeather(){
-  var detailPoints = polyline.GetPointsAtDistance(1609.34 * (document.getElementById('mileValue').value));
-
-  // var makeWeatherDiv = function(lat, lng) {
-
-  //   var detailedWeatherDiv = $('<div>').text('Loading...'); 
-
-  // };
-
-  
-  for (var i = 0; i < detailPoints.length; i++) {
-
-    let detailPointLat= detailPoints[i].lat();
-    let detailPointLng= detailPoints[i].lng();
-    let weatherListItem = $("<li class='list-group-item' id='item'>");
-
-    $(".list-group").append(weatherListItem);
-
-    console.log("Coordinates in: " + detailPointLat + "," + detailPointLng);
-
-    //Reusing function to get duration and location data
-    directionsAPI(originLat,originLng,detailPointLat,detailPointLng)
-    .done(function(response){
-
-      var waypointLocationLat= response.routes[0].legs[0].end_location.lat;
-      var waypointLocationLng= response.routes[0].legs[0].end_location.lng;
-      var waypointAddress=response.routes[0].legs[0].end_address;
-      var toWaypointdurationString=response.routes[0].legs[0].duration.text;
-      //determine if waypoint is mins/hrs/days
-      var waypointPassTime = waypointDuration(toWaypointdurationString);
-      //create location Title for each in the div
-      var detailedLocation= $("<div>").text(waypointAddress);  
-      console.log("Coordinates out: " + waypointLocationLat + "," + waypointLocationLng);
-
-      //Modifications made to the WEATHER API to elivate the need for a marker parameter and output data to div instead of info window
-      var undergroundWeatherapiKey="b26eea70cef99b97";
-      var undergroundWeatherURL="https://api.wunderground.com/api/"+undergroundWeatherapiKey+"/hourly10day/q/"+waypointLocationLat+","+waypointLocationLng+".json";
-//            console.log(undergroundWeatherURL);
-
-      
-
-      $.ajax({
-
-        //makesure you change this when user inputs
-        url: undergroundWeatherURL,
-        method:"GET"
-      })
-      .done(function(response){
-        var time;
-        var weekDay;
-        var temp;
-        var condition;
-        var icon;
-        var responseHrinterger;
-        var yday;
-        var day;
-        var humidity;
-        var wind;
-        var dayWeatherArray=[];
-        // console.log("WeatdurationDays"+durationDays);
-        // console.log("waypointsPasstime"+waypointPasstime);
-        if(response.hourly_forecast[0]===" "){
-          string="NO WHEATHER AVAIL FOR THIS LOCATION";
-        }            
-        else{
-          if(durationDays===0){
-            for(var i=0;i<response.hourly_forecast.length;i++){
-              responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
-              if(responseHrinterger===waypointPassTime){
-                time= $("<div>").text("Time: " + response.hourly_forecast[i].FCTTIME.weekday_name);
-                weekDay= $("<div>").text(response.hourly_forecast[i].FCTTIME.civil);
-                temp= $("<div>").text("Temp: "+ response.hourly_forecast[i].temp.english+" °F");
-                condition= $("<div>").text(response.hourly_forecast[i].wx);
-                icon= $("<div>").html("<img src='"+response.hourly_forecast[i].icon_url+"'>");
-                humidity= $("<div>").text("Humidity: "+response.hourly_forecast[i].humidity+" %");
-                wind= $("<div>").text("Wind: "+response.hourly_forecast[i].wspd.english+" mph");
-                break;
-              }
-            }
-          }
-          else{
-            yday=currentDayoftheYear+durationDays;
-            console.log("yday"+yday);
-            //SECOND ATTEMPT IDEA
-            for(var i=0;i<response.hourly_forecast.length;i++){
-              day=parseInt(response.hourly_forecast[i].FCTTIME.yday);
-              responseHrinterger=parseInt(response.hourly_forecast[i].FCTTIME.hour);
-              if(responseHrinterger===waypointPassTime&&day===yday){
-                time= $("<div>").text("Arrival Day: " + response.hourly_forecast[i].FCTTIME.weekday_name);
-                weekDay= $("<div>").text(response.hourly_forecast[i].FCTTIME.civil);
-                temp= $("<div>").text("Temp: "+ response.hourly_forecast[i].temp.english+" °F");
-                condition= $("<div>").text(response.hourly_forecast[i].wx);
-                icon= $("<div>").html("<img src='"+response.hourly_forecast[i].icon_url+"'>");
-                humidity= $("<div>").text("Humidity: "+response.hourly_forecast[i].humidity+" %");
-                wind= $("<div>").text("Wind: "+response.hourly_forecast[i].wspd.english+" mph");
-              }
-            }
-          }
-          //Attach lines of weather info to weather item div
-          weatherListItem.append(detailedLocation);
-          weatherListItem.append(time);
-          weatherListItem.append(weekDay);
-          weatherListItem.append(icon);
-          weatherListItem.append(temp);
-          weatherListItem.append(condition);
-          weatherListItem.append(wind);
-          weatherListItem.append(humidity);
-          //output detailed wether div to detailed weather container
-                        
-        }
-      });
-    })        
-  };
-};
-
 
 //-------AUTOCOMPLETE
 var placeSearch, autocomplete;
@@ -742,3 +594,4 @@ function geolocate() {
     });
   }
 };
+
