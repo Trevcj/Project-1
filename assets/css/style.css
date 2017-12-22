@@ -53,6 +53,19 @@ h5 {
 	width:100%;
 	height:450px;
 }
+
+ul{
+	text-align: center;
+}
+.detailLocation{
+	font-weight: bolder;
+}
+.duration{
+	font-style: italic;
+	color:#a50a1c;
+}
+
+
 footer {
 	text-align: center;
 	background-image: url(../images/topography.png);
